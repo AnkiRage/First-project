@@ -7,12 +7,13 @@
 #include <string.h>
 #include <stdio.h>
 #include <iomanip>
-
-using std::cout;
-using std::cin;
+#include <vector>
+using std::vector;
 
 
 // bool Sort(std::vector<int>&arr);
-void Sort_Shell(int *A, int size);
-void Out(int *A, int n);
-int Check_Arr(int *A, int n);
+void Sort_Shell_Usual(vector<int>& Arr);
+void Sort_Shell_Sedjwick(vector<int>& Arr);
+void Sort_Shell_(vector<int>& Arr);
+void Out(vector<int>& A);
+bool Check_Arr(vector<int>& A);

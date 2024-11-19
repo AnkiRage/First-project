@@ -5,19 +5,24 @@
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
+#include <vector>
+#include <cmath>
+
+using std::cout;
 
 
-void Out(int *A, int n){
+void Out(vector<int>& A){
     cout << "\n\n";
-    for (int  i = 0 ; i < n ;i++){
+    for (int  i = 0 ; i < A.size() ;i++){
         cout << " " << A[i];
     }
 }
 
 
-void Sort_Shell(int *Arr, int size) {
-    for (int s = size / 2; s > 0; s /= 2) {
-        for (int i = s; i < size; ++i) {
+
+void Sort_Shell_Usual(vector<int>& Arr) {
+    for (int s = Arr.size() / 2; s > 0; s /= 2) {
+        for (int i = s; i < Arr.size(); ++i) {
             for (int j = i - s; j >= 0 && Arr[j] > Arr[j + s]; j -= s) {
                 int temp = Arr[j];
                 Arr[j] = Arr[j + s];
@@ -27,13 +32,25 @@ void Sort_Shell(int *Arr, int size) {
     }
 }
 
-int  Check_Arr(int *A, int n){
-    for (int i = 0; (i + 1) < n && A[i] != A[i+1]; i++){
-        cout << "\nNot Sorted";
-        return 0;
+
+void Sort_Shell_Sedjwick(vector<int>& Arr) {
+    int s = 5;
+    for (; s > 0; s /= 2) {
+
+        for (int i = s; i < Arr.size(); ++i) {
+            for (int j = i - s; j >= 0 && Arr[j] > Arr[j + s]; j -= s) {
+                int temp = Arr[j];
+                Arr[j] = Arr[j + s];
+                Arr[j + s] = temp;
+            }
+        }
     }
-    cout << "\nSorted";
-    return 0;
 }
 
 
+bool Check_Arr(vector<int>& A){
+    for (int i = 0; (i + 1) < A.size() ; i++)
+        if (A[i] > A[i+1])
+            return false;
+    return true;
+}
