@@ -5,68 +5,70 @@
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
+#include <vector>
+
+using std::vector;
+using std::cout;
+using std::cin;
 
 
-void Out(int *A, int n){
+void Out(vector<int>& Array){
     cout << "\n\n";
-    for (int  i = 0 ; i < n ;i++){
-        cout << " " << A[i];
+    for (int  i = 0 ; i < Array.size() ;i++){
+        cout << " " << Array[i];
     }
 }
 
 
-void Heap_Build(int *A, int n, int i)
-{
+void Heap_Build(vector<int>& Array,int n, int i){
     int buf;
     int largest = i;   
     int l = 2*i + 1; 
     int r = 2*i + 2; 
 
  
-    if (l < n && A[l] > A[largest])
+    if (l < n && Array[l] > Array[largest])
         largest = l;
 
    
-    if (r < n && A[r] > A[largest])
+    if (r < n && Array[r] > Array[largest])
         largest = r;
 
     if (largest != i)
     {
-        buf = A[i];
-        A[i] = A[largest];
-        A[largest] = buf;
-        Heap_Build(A, n, largest);
+        buf = Array[i];
+        Array[i] = Array[largest];
+        Array[largest] = buf;
+        Heap_Build(Array, n, largest);
     }
 }
 
 
-void Heap_Sort(int *A, int n)
+void Heap_Sort(vector<int>& Array)
 {   
     int buf;
-    for (int i = n / 2 - 1; i >= 0; i--)
-        Heap_Build(A, n, i);
+    for (int i = Array.size() / 2 - 1; i >= 0; i--)
+        Heap_Build(Array, Array.size(), i);
 
 
-    for (int i=n-1; i>=0; i--)
+    for (int i=Array.size()-1; i>=0; i--)
     {
 
-        buf = A[0];
-        A[0] = A[i];
-        A[i] = buf;
-        Heap_Build(A, i, 0);
+        buf = Array[0];
+        Array[0] = Array[i];
+        Array[i] = buf;
+        Heap_Build(Array, i , 0);
     }
 }
 
 
 
 
-int  Check_Arr(int *A, int n){
-    for (int i = 0; (i + 1) < n && A[i] != A[i+1]; i++){
-        cout << "\nNot Sorted";
-        return 0;
-    }
-    cout << "\nSorted";
-    return 0;
-}
+bool  Check_Arr(vector<int>& Array){
+        for (int i = 0; (i + 1) < Array.size() ; i++)
+       if (Array[i] > Array[i+1])  return false;
+    
 
+       return true;
+}
 
