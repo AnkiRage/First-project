@@ -16,12 +16,11 @@ using std::string;
 int main()
 {   
     srand(time(0));
-    clock_t time , av_time ;
-    double time_seconds;
+    clock_t time;
+    double av_time;
     int size = 10000, range = 10, m_range, m_size;
     FILE* f;
     vector<int> Array(size);
-
     for(int i = 1, m_size = size; i <=3; m_size*=10, i++){
         Array.resize(m_size);
 
@@ -38,13 +37,13 @@ int main()
                 Sort_Shell_Usual(Array);
                 // time_seconds = (clock() - time) * CLOCKS_PER_SEC;
                 time = clock() - time;
-                av_time +=time;
+                av_time += (double) time;
                 if(!Check_Arr(Array))
                     cout << "\nMassive " << m_size << " with range " << m_range << " was not sorted";
 
             }
             fclose(f); 
-            cout << "\nMassive " << m_size << " with range " << m_range << " was sorted in average time of " << av_time/3 << " time units.";
+            cout << "\nMassive " << m_size << " with range " << m_range << " was sorted in average time of " << (double)av_time/3.0 << " time units.";
         }
     }
 
