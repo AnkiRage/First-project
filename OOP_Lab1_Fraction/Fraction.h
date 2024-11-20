@@ -22,13 +22,13 @@ public:
     void Out() const;
     void Set_Fraction(int H, int L);
     void Reduction();
-    void Int_to_Double()const;
+    double To_Double()const;
     void Swap();
 
-    Fraction operator+(const Fraction& B);
-    Fraction operator-(const Fraction& B);
-    Fraction operator*(const Fraction& B);
-    Fraction operator/(const Fraction& B);
+    Fraction operator+(const Fraction& B)const;
+    Fraction operator-(const Fraction& B)const;
+    Fraction operator*(const Fraction& B)const;
+    Fraction operator/(const Fraction& B)const;
 
 
     bool operator>(const Fraction B)const;
@@ -37,7 +37,6 @@ public:
     bool operator!=(const Fraction B)const;
 
 private:
-    vector<int> Elem {2 ,3 ,5 ,7 , 11, 13, 17, 19, 23, 29};
     int Lower;
     int Higher;
 };
