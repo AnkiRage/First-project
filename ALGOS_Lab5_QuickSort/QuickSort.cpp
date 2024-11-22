@@ -13,8 +13,7 @@ using std::cin;
 
 
 void Swap(int& A, int& B){
-    int buff;
-    buff = A;
+    int buff = A;
     A = B;
     B = buff;
 }
@@ -31,29 +30,34 @@ void Out(vector<int>& Array){
 
 void Quick_Sort(vector<int>& Array, int left, int right)
 {   
-    if (left >= right ) return;
+
+    if (left >= right) return;
+
+    srand(time(0));
+    int pivotIndex = left + rand() % (right - left + 1);
+    Swap(Array[pivotIndex], Array[right]);
+    int pivot = Array[right];
+
     int start = left;
     int end = right;
-    //cout << " start = " << start << " end = " << end ;
-    int pivot = Array[right];
-    // cout << " \npivot " << pivot; 
-    right --;
+    right--;
 
-    while (left <= right)
-    {   
-        while ((Array[left] < pivot) && left <= end)
+    while (left <= right) {
+        while (left <= end && Array[left] < pivot)
             left++;
-        while ((Array[right] > pivot) && right >= start)
+        while (right >= start && Array[right] > pivot)
             right--;
-        if (left <= right){
+        if (left <= right) {
             Swap(Array[left], Array[right]);
             left++;
             right--;
         }
     }
-    Swap(pivot, Array[left]);
-    Quick_Sort(Array, start, left -1);
+    Swap(Array[left], Array[end]);
+
+    Quick_Sort(Array, start, left - 1);
     Quick_Sort(Array, left + 1, end);
+
 }
 
 
