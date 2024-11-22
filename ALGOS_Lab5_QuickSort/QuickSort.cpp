@@ -34,8 +34,8 @@ void Quick_Sort(vector<int>& Array, int left, int right)
     if (left >= right) return;
 
     srand(time(0));
-    int pivotIndex = left + rand() % (right - left + 1);
-    Swap(Array[pivotIndex], Array[right]);
+    int Pivot_Index = left + rand() % (right - left + 1);
+    Swap(Array[Pivot_Index], Array[right]);
     int pivot = Array[right];
 
     int start = left;
