@@ -34,7 +34,7 @@ int main()
                 fclose(f); 
 
                 time =  clock();
-                Sort_Shell_Hibbar(Array);
+                Sort_Shell_Sedjwick(Array);
                 // time_seconds = (clock() - time) * CLOCKS_PER_SEC;
                 time = clock() - time;
                 av_time += time;

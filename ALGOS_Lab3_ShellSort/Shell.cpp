@@ -34,26 +34,69 @@ void Sort_Shell_Usual(vector<int>& Arr) {
 
 
 void Sort_Shell_Sedjwick(vector<int>& Arr) {
-    int s = 0;
-    for (int count; 3*count < Arr.size(); count++) {
-        if (count%2 == 1)
-            s = 8 * 2 ^ count - 6 * 2 ^ (count + 1) / 2;
-        else  s = 9 * 2 ^ count - 9 * 2 ^ count / 2;
+    // int buf;
+    // vector<int> Add;
+    // for(int count = 0; ; count++){
+    //     if (count%2 == 1)
+    //         buf = 8 * pow(2, count) - 6 * pow(2, (count + 1) / 2);
+    //     else  buf = 9 * pow(2, count) - 9 * pow(2, count / 2);
+    //     // cout << " \nbuf = " << buf;
+    //     if (buf >= Arr.size()) 
+    //         break;
+    //     Add.push_back(buf);
+    // }
+    // for ( int f = Add.size() - 1; f >= 0 ; f-- ){
+    // int s = Add[f];
+    //     for (int i = s; i < Arr.size(); ++i) {
+    //         for (int j = i - s; j >= 0 && Arr[j] > Arr[j + s]; j -= s) {
+    //             int temp = Arr[j];
+    //             Arr[j] = Arr[j + s];
+    //             Arr[j + s] = temp;
+    //         }
+    //     }
+    // }
 
+
+
+
+
+    if (Arr.size() == 0) return;
+      vector<int> Add; // Массив шагов
+    int buf;
+
+    // Генерация последовательности Седжвика
+    for (int count = 0;; ++count) {
+        if (count % 2 == 1)
+            buf = 8 * (1 << count) - 6 * (1 << ((count + 1) / 2));
+        else
+            buf = 9 * (1 << count) - 9 * (1 << (count / 2));
+        
+        if (buf >= Arr.size()) break; // Остановка, если шаг больше размера массива
+        Add.push_back(buf);
+    }
+
+    // Итерация по шагам в обратном порядке
+    for (int f = Add.size() - 1; f >= 0; --f) {
+        int s = Add[f];
         for (int i = s; i < Arr.size(); ++i) {
-            for (int j = i - s; j >= 0 && Arr[j] > Arr[j + s]; j -= s) {
-                int temp = Arr[j];
-                Arr[j] = Arr[j + s];
-                Arr[j + s] = temp;
+            int temp = Arr[i];
+            int j = i;
+            while (j >= s && Arr[j - s] > temp) {
+                Arr[j] = Arr[j - s];
+                j -= s;
             }
+            Arr[j] = temp;
         }
     }
 }
 
-void Sort_Shell_Hibbar(vector<int>& Arr){
-    int s;
-    for (int count = 0; 2 ^ count - 1 <= Arr.size(); count++) {
-        s = 2 ^ count - 1;
+void Sort_Shell_Hibbard(vector<int>& Arr){
+    vector<int> Add;
+    for( int  count = 0; (pow(2, count) - 1) < Arr.size(); count++){
+        Add.push_back(pow(2, count) - 1);
+    }
+    for ( int f = Add.size() - 1; f >= 0 ; f-- ){
+    int s = Add[f];
         for (int i = s; i < Arr.size(); ++i) {
             for (int j = i - s; j >= 0 && Arr[j] > Arr[j + s]; j -= s) {
                 int temp = Arr[j];
