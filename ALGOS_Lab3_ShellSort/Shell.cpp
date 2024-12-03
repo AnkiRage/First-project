@@ -19,6 +19,23 @@ void Out(vector<int>& A){
 }
 
 
+void Sort_Shell(vector<int>& Arr, ShellSortType type)
+{
+    switch (type)
+    {
+    case ShellSortType::Shell:
+            Sort_Shell_Usual(Arr);
+        break;
+    
+    case ShellSortType::Hibbard:
+            Sort_Shell_Hibbard(Arr);
+        break;
+
+    case ShellSortType::Sedgewick:
+            Sort_Shell_Sedjwick(Arr);
+        break;
+    }
+}
 
 void Sort_Shell_Usual(vector<int>& Arr) {
     for (int s = Arr.size() / 2; s > 0; s /= 2) {
@@ -34,58 +51,26 @@ void Sort_Shell_Usual(vector<int>& Arr) {
 
 
 void Sort_Shell_Sedjwick(vector<int>& Arr) {
-    // int buf;
-    // vector<int> Add;
-    // for(int count = 0; ; count++){
-    //     if (count%2 == 1)
-    //         buf = 8 * pow(2, count) - 6 * pow(2, (count + 1) / 2);
-    //     else  buf = 9 * pow(2, count) - 9 * pow(2, count / 2);
-    //     // cout << " \nbuf = " << buf;
-    //     if (buf >= Arr.size()) 
-    //         break;
-    //     Add.push_back(buf);
-    // }
-    // for ( int f = Add.size() - 1; f >= 0 ; f-- ){
-    // int s = Add[f];
-    //     for (int i = s; i < Arr.size(); ++i) {
-    //         for (int j = i - s; j >= 0 && Arr[j] > Arr[j + s]; j -= s) {
-    //             int temp = Arr[j];
-    //             Arr[j] = Arr[j + s];
-    //             Arr[j + s] = temp;
-    //         }
-    //     }
-    // }
-
-
-
-
-
-    if (Arr.size() == 0) return;
-      vector<int> Add; // Массив шагов
     int buf;
-
-    // Генерация последовательности Седжвика
-    for (int count = 0;; ++count) {
-        if (count % 2 == 1)
-            buf = 8 * (1 << count) - 6 * (1 << ((count + 1) / 2));
-        else
-            buf = 9 * (1 << count) - 9 * (1 << (count / 2));
-        
-        if (buf >= Arr.size()) break; // Остановка, если шаг больше размера массива
+    vector<int> Add;
+    for(int count = 0; ; count++){
+        if (count%2 == 1)
+            buf = 8 * pow(2, count) - 6 * pow(2, (count + 1) / 2) + 1;
+        else 
+            buf = 9 * pow(2, count) - 9 * pow(2, count / 2) + 1;
+        // cout << " \nbuf = " << buf;
+        if (buf >= Arr.size()) 
+            break;
         Add.push_back(buf);
     }
-
-    // Итерация по шагам в обратном порядке
-    for (int f = Add.size() - 1; f >= 0; --f) {
-        int s = Add[f];
+    for ( int f = Add.size() - 1; f >= 0 ; f-- ){
+    int s = Add[f];
         for (int i = s; i < Arr.size(); ++i) {
-            int temp = Arr[i];
-            int j = i;
-            while (j >= s && Arr[j - s] > temp) {
-                Arr[j] = Arr[j - s];
-                j -= s;
+            for (int j = i - s; j >= 0 && Arr[j] > Arr[j + s]; j -= s) {
+                int temp = Arr[j];
+                Arr[j] = Arr[j + s];
+                Arr[j + s] = temp;
             }
-            Arr[j] = temp;
         }
     }
 }

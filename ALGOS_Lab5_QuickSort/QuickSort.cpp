@@ -30,10 +30,9 @@ void Out(vector<int>& Array){
 
 void Quick_Sort(vector<int>& Array, int left, int right)
 {   
+    if (left >= right)
+        return;
 
-    if (left >= right) return;
-
-    srand(time(0));
     int Pivot_Index = left + rand() % (right - left + 1);
     Swap(Array[Pivot_Index], Array[right]);
     int pivot = Array[right];
@@ -54,20 +53,19 @@ void Quick_Sort(vector<int>& Array, int left, int right)
         }
     }
     Swap(Array[left], Array[end]);
+    left++;
 
-    Quick_Sort(Array, start, left - 1);
-    Quick_Sort(Array, left + 1, end);
-
+    Quick_Sort(Array, start, right);
+    Quick_Sort(Array, left, end);
 }
 
 
 
 
-bool  Check_Arr(vector<int>& Array){
-        for (int i = 0; (i + 1) < Array.size() ; i++)
-       if (Array[i] > Array[i+1])  return false;
-    
-
-       return true;
+bool Check_Arr(vector<int>& Array){
+    for (int i = 0; (i + 1) < Array.size() ; i++)
+        if (Array[i] > Array[i+1])
+            return false;
+    return true;
 }
 

@@ -10,8 +10,14 @@
 #include <vector>
 using std::vector;
 
+enum ShellSortType
+{
+    Shell,
+    Hibbard,
+    Sedgewick
+};
 
-// bool Sort(std::vector<int>&arr);
+void Sort_Shell(vector<int>& Arr, ShellSortType type);
 void Sort_Shell_Usual(vector<int>& Arr);
 void Sort_Shell_Sedjwick(vector<int>& Arr);
 void Sort_Shell_Hibbard(vector<int>& Arr);

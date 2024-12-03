@@ -34,7 +34,8 @@ int main()
                     fscanf(f, " %d", &Array[i]);
             }
 
-            for (int i = 1; i <= 3 ; i++){
+            int runsCount = 10;
+            for (int i = 1; i <= runsCount ; i++){
 
                 time =  clock();
                 // cout << Array.size() - 1;
@@ -47,7 +48,7 @@ int main()
             }
             fclose(f); 
             if (Check_Arr(Array))
-            cout << "\nMassive " << m_size << " with range " << m_range << " was sorted in average time of " << av_time/3 << " time units.";
+            cout << "\nMassive " << m_size << " with range " << m_range << " was sorted in average time of " << av_time/runsCount << " ms.";
         }
     }
 
