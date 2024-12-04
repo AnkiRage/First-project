@@ -30,11 +30,11 @@ int main()
 	A.Del_All_Value(10);
 	A.Print();
 	Array B(A);
-	cout << "B :";
-	B.Print();
-	Array C = B + 1;
-	B.Print();
-	C.Print();
+	cout << B;
+	// B.Print();
+	// Array C = B + 1;
+	// B.Print();
+	// C.Print();
 
 	// cin >> A;
 	// cout << A;

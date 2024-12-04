@@ -11,6 +11,8 @@
 
 using std::cout;
 using std::cin;
+using std::ostream;
+using std::istream;
 
 
 template <typename Type>
@@ -22,6 +24,7 @@ void Swap(Type& A, Type& B)
 }
 
 
+
 class Array
 {
 public:
@@ -29,7 +32,6 @@ public:
 	Array(int* b, int m); // – конструктор с аргументом, m – число элементов в массиве b
 	Array(const Array& x);
 	~Array(); // деструктор
-
 
 	int Get_Size() const;
 	void Swap_Arr(Array& B);
@@ -46,8 +48,8 @@ public:
 	void Resize();
 	void Resize(int factor);
 
-
-	int& operator [](int index) const; //?
+	int& operator [](const int index); 
+	const int& operator [](const int index) const; 
 	Array& operator =(const Array& B); 
 	Array& operator+=(int value );
 	Array& operator+=(const Array& B);
@@ -55,10 +57,14 @@ public:
 	Array operator+(const Array& B) const; 
 	bool operator==(const Array&B) const;
 	bool operator!=(const Array&B) const;
+	
 
 private:
 	int* Arr;
 	int Capacity, Size;  //Capacity - действительный размер массива ::::  Size - количество элементов в массиве
 };
+
+ostream& operator<<(ostream& os, const Array& Arr);
+istream& operator>>(istream& is, Array& Arr);
 
 

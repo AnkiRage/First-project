@@ -11,7 +11,26 @@
 
 using std::cout;
 using std::cin;
+using std::ostream;
+using std::istream;
 
+ostream& operator<<(ostream& os, const Array& Arr){ //////////////////////
+	os << '{';
+	for (int i = 0 ; i < Arr.Get_Size(); i++){
+		os << Arr[i];
+		if (i < Arr.Get_Size() - 1)
+			os << ", ";
+	}
+	os << '}';
+	return os;
+}
+
+istream& operator>>(istream& is, Array& Arr){ //////////////////////
+	for (int  i = 0 ; i < Arr.Get_Size(); i++){
+		is >> Arr[i];
+	}
+	return is;
+}
 
 Array::Array(int m) {
 	Arr = new int[m];
@@ -95,10 +114,10 @@ bool Array::Set_Index(int index, int value){
 }
 
 void Array::Print() const{
-	cout << "\n ";
 	for( int i = 0 ; i < Size; i++){
-		cout << " " << Arr[i];
+		cout << Arr[i] << " ";
 	}
+	cout << "\n";
 }
 
 void Array::Sort(){
@@ -174,9 +193,11 @@ int Array::Find_Min() const{
 	return min;
 }
 
+int& Array::operator [](const int index){
+	return Arr[index];
+}
 
-
-int& Array::operator [](int index) const{
+const int& Array::operator [](const int index) const{
 	return Arr[index];
 }
 
@@ -209,20 +230,20 @@ Array& Array::operator+=(const Array& B){
 }
 
 Array Array::operator+(int value ) const{
-	Array NEW(*this);
-	NEW.Set_End(value);
-	return NEW;
+	Array Result(*this);
+	Result.Set_End(value);
+	return Result;
 }  
 
 Array Array::operator+(const Array& B) const{
-	Array NEW(*this);
-	if (NEW.Capacity < NEW.Size + B.Size){
-		NEW.Resize(B.Size);
+	Array Result(*this);
+	if (Result.Capacity < Result.Size + B.Size){
+		Result.Resize(B.Size);
 	}
 	for(int i = 0; i < B.Size; i++){
-		Arr[NEW.Size++] = Arr[i];
+		Arr[Result.Size++] = Arr[i];
 	}
-	return NEW;
+	return Result;
 }
 
 bool Array::operator==(const Array&B) const{
