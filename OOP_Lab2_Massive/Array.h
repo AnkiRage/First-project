@@ -28,6 +28,11 @@ template <typename ItemType>
 class Array
 {
 public:
+	typedef ItemType* iterator; 
+
+	iterator begin();
+	iterator end();
+
 	Array(int m = 20); // конструктор по умолчанию размера 20
 	Array(ItemType* b, int m); // – конструктор с аргументом, m – число элементов в массиве b
 	Array(const Array<ItemType>& x);
@@ -110,6 +115,19 @@ template <typename ItemType>
 Array<ItemType>::~Array() {
 	delete Arr;
 }
+
+template <typename ItemType> 
+typename Array<ItemType>::iterator Array<ItemType>::begin()
+{
+    return Arr;
+}
+
+template <typename ItemType> 
+typename Array<ItemType>::iterator Array<ItemType>::end()
+{
+    return Arr + Size;
+}
+
 
 template <typename ItemType>
 int Array<ItemType>::Get_Size() const{

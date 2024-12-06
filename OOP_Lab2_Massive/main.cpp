@@ -33,9 +33,10 @@ int main()
 	Array<int> C;
 	cout << B;
 	B[0] = 17;
-	cout << "\n" << B << "Arr[2] = " << B[2];
-	cin >> B[3];
-	cout << B;
+	cout << "\n" << B << "\nArr[2] = " << B[2];
+	// cin >> B[3];
+	// cout << B;
+	cout << "\niterator[9] = " << *(B.begin() + 9) << "   end = " << *(B.end() - 1); 
 	// B.Print();
 	// Array<int> C = B + 1;
 	// B.Print();
