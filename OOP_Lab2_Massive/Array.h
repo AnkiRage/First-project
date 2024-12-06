@@ -70,6 +70,7 @@ private:
 	ItemType* Arr;
 	int Capacity, Size;  //Capacity - действительный размер массива ::::  Size - количество элементов в массиве
 };
+
 template <typename ItemType>
 ostream& operator<<(ostream& os, const Array<ItemType>& Arr){ //////////////////////
 	os << '{';
@@ -81,6 +82,7 @@ ostream& operator<<(ostream& os, const Array<ItemType>& Arr){ //////////////////
 	os << '}';
 	return os;
 }
+
 template <typename ItemType>
 istream& operator>>(istream& is, Array<ItemType>& Arr){ //////////////////////
 	for (int  i = 0 ; i < Arr.Get_Size(); i++){
@@ -188,7 +190,7 @@ void Array<ItemType>::Set_End(ItemType value){
     if ( Size == Capacity){
         Resize();
     }
-	Arr[Size] = value;
+	*end() = value;
 	Size++;
 }
 
@@ -197,14 +199,14 @@ bool Array<ItemType>::Set_Index(int index, ItemType value){
 	if (index >= Size){
 		return false;
 	}
-	Arr[index] == value;
+	*(begin() + index) == value;
 	return true;
 }
 
 template <typename ItemType>
 void Array<ItemType>::Print() const{
-	for( int i = 0 ; i < Size; i++){
-		cout << Arr[i] << " ";
+	for(iterator i = begin() ; i != end(); i++){
+		cout << *i << " ";
 	}
 	cout << "\n";
 }
@@ -270,9 +272,9 @@ bool Array<ItemType>::Del_All_Value(ItemType value){
 template <typename ItemType>
 ItemType Array<ItemType>::Find_Max() const{
 	int max = Arr[0];
-	for( int i = 1 ; i < Size; i++){
-		if(max < Arr[i])
-			max = Arr[i];
+	for( iterator i = (begin() + 1) ; i != end(); i++){
+		if(max < *i)
+			max = *i;
 	}
 	return max;
 }
@@ -280,9 +282,9 @@ ItemType Array<ItemType>::Find_Max() const{
 template <typename ItemType>
 ItemType Array<ItemType>::Find_Min() const{
 	int min = Arr[0];
-	for( int i = 1 ; i < Size; i++){
-		if(min > Arr[i])
-			min = Arr[i];
+	for( iterator i = (begin() + 1) ; i != end(); i++){
+		if(min > *i)
+			min = *i;
 	}
 	return min;
 }

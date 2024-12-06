@@ -37,6 +37,7 @@ int main()
 	// cin >> B[3];
 	// cout << B;
 	cout << "\niterator[9] = " << *(B.begin() + 9) << "   end = " << *(B.end() - 1); 
+	cout << "Find value: " << B.Find_Value(17);
 	// B.Print();
 	// Array<int> C = B + 1;
 	// B.Print();
