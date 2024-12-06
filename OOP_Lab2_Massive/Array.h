@@ -32,6 +32,8 @@ public:
 
 	iterator begin();
 	iterator end();
+	const iterator begin() const;
+    const iterator end() const;
 
 	Array(int m = 20); // конструктор по умолчанию размера 20
 	Array(ItemType* b, int m); // – конструктор с аргументом, m – число элементов в массиве b
@@ -117,17 +119,24 @@ Array<ItemType>::~Array() {
 }
 
 template <typename ItemType> 
-typename Array<ItemType>::iterator Array<ItemType>::begin()
-{
+typename Array<ItemType>::iterator Array<ItemType>::begin(){
     return Arr;
 }
 
 template <typename ItemType> 
-typename Array<ItemType>::iterator Array<ItemType>::end()
-{
+typename Array<ItemType>::iterator Array<ItemType>::end(){
     return Arr + Size;
 }
 
+template <typename ItemType>
+const typename Array<ItemType>::iterator Array<ItemType>::begin() const{
+    return Arr;
+}
+
+template <typename ItemType>
+const typename Array<ItemType>::iterator Array<ItemType>::end() const{
+    return Arr + Size;
+}
 
 template <typename ItemType>
 int Array<ItemType>::Get_Size() const{

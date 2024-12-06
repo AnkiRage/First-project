@@ -1,4 +1,4 @@
-// #include "Array.h"
+#include "Array.h"
 
 // #include <iostream>
 // #include <cmath>
