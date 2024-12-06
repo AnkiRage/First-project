@@ -14,7 +14,7 @@ using std::cin;
 int main()
 {
 	srand(time(0));
-	Array A(30);
+	Array<int> A(30);
 	for ( int i =0; i < 40; i++){
 		int x = rand() % 100 + 1;
 		A.Set_End(x);
@@ -29,10 +29,15 @@ int main()
 	A.Print();
 	A.Del_All_Value(10);
 	A.Print();
-	Array B(A);
+	Array<int> B(A);
+	Array<int> C;
+	cout << B;
+	B[0] = 17;
+	cout << "\n" << B << "Arr[2] = " << B[2];
+	cin >> B[3];
 	cout << B;
 	// B.Print();
-	// Array C = B + 1;
+	// Array<int> C = B + 1;
 	// B.Print();
 	// C.Print();
 
