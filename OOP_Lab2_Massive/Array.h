@@ -54,6 +54,9 @@ public:
 	ItemType Find_Min() const;
 	void Resize();
 	void Resize(int factor);
+	void Set_BefIt(ItemType value, ItemType* index);
+	void Del_ItRange(ItemType* start, ItemType* finish);
+	void Del_Iterator(ItemType* index);
 
 	ItemType& operator [](const int index); 
 	const ItemType& operator [](const int index) const; 
@@ -373,4 +376,28 @@ bool Array<ItemType>::operator!=(const Array<ItemType>&B) const{
 	return true;
 }
 
+template <typename ItemType>
+void Array<ItemType>::Set_BefIt(ItemType value, iterator index){
+	if (index <= begin() || index > end()) 
+		return;
+	if (end() == &Arr[Capacity]) 
+		Resize();
+	*(index - 1) = value;
+}
 
+template <typename ItemType>
+void Array<ItemType>::Del_ItRange(iterator start, iterator finish){
+	int dif = finish - start;
+	for(iterator i = start; i != end() - dif; i++){
+		*(i) = *(i + dif);
+	}
+	Size -= dif;
+}
+
+template <typename ItemType>
+void Array<ItemType>::Del_Iterator(iterator index){
+	for (iterator  i = index; i != end() - 1; i++){
+		*(index) = *(index + 1);
+	}
+	Size--;
+}
