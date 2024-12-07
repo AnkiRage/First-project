@@ -120,7 +120,7 @@ Array<ItemType>::Array(ItemType* b, int m) {
 
 template <typename ItemType>
 Array<ItemType>::~Array() {
-	delete Arr;
+	delete[] Arr;
 }
 
 template <typename ItemType> 
@@ -156,7 +156,7 @@ void Array<ItemType>::Resize(){
 		Arr2[i] = Arr[i];
 	}
 	Capacity = Capacity + Capacity / 3 ;
-	delete Arr;
+	delete[] Arr;
 	Arr = Arr2;
 }
 
@@ -168,7 +168,7 @@ void Array<ItemType>::Resize(int factor){
 		Arr2[i] = Arr[i];
 	}
 	Capacity = Capacity + factor + (factor + Capacity) / 3 ;
-	delete Arr;
+	delete[] Arr;
 	Arr = Arr2;
 }
 
@@ -301,7 +301,6 @@ template <typename ItemType>
 const ItemType& Array<ItemType>::operator [](const int index) const{
 	return Arr[index];
 }
-
 
 template <typename ItemType>
 Array<ItemType>& Array<ItemType>::operator=(const Array<ItemType>& B){
