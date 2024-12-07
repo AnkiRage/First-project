@@ -16,7 +16,8 @@ using Cell = unsigned char;
 using UI = unsigned int;
 
 BoolVector::BoolVector(int lenght){
-	m_cellCount = lenght / cellSize;
+	m_lenght = lenght;
+	m_cellCount = m_lenght / cellSize;
 	if (lenght % cellSize != 0)
 		m_cellCount++;
 	Vector = new Cell[m_cellCount];
@@ -32,7 +33,8 @@ BoolVector::BoolVector(const BoolVector& Other){
 }
 
 BoolVector::BoolVector(int lenght, bool value){
-	m_cellCount = lenght / cellSize;
+	m_lenght = lenght;
+	m_cellCount = m_lenght / cellSize;
 	if (lenght % cellSize != 0)
 		m_cellCount++;
 	Vector = new Cell[m_cellCount];
@@ -48,16 +50,24 @@ BoolVector::BoolVector(int lenght, bool value){
 }
 
 BoolVector::BoolVector(char CharVector[], int lenght){
-	m_cellCount = lenght / cellSize;
-	if (lenght % cellSize != 0)
-		m_cellCount++;
-	Vector = new Cell[m_cellCount];
 	Cell mask = 0;
+	int flag = 0;
+	m_lenght = lenght;
+	m_cellCount = m_lenght / cellSize;
+	if (lenght % cellSize != 0){
+		m_cellCount++;
+		flag = 1;
+	}
+	Vector = new Cell[m_cellCount];
 	for (int i = 0; i < m_cellCount; i++){
 		for (int g = 0, mask = 0; g < cellSize; g++){
 			if (CharVector[i * cellSize + g ] == '1')
 				mask++;
 			mask <<= 1;
+		}
+		if(i == m_cellCount - 1 && flag == 1){
+			int shift = m_lenght % cellSize;
+			mask <<= (cellSize - shift);
 		}
 		Vector[i] = mask;
 	}
