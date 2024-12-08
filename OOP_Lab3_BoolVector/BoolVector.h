@@ -16,6 +16,12 @@ using std::istream;
 
 using UI = unsigned int;
 
+
+
+class BoolVector
+{
+using Cell = unsigned char;
+
 template <typename Type>
 void Swap(Type& A, Type& B)
 {
@@ -23,11 +29,6 @@ void Swap(Type& A, Type& B)
     A = B;
     B = Buff;
 }
-
-class BoolVector
-{
-using Cell = unsigned char;
-
 
 public:
 	static const int cellSize = 8;
@@ -39,12 +40,12 @@ public:
 	~BoolVector();
 
 	int Get_Lenght() const;
-	void Swap(BoolVector& Other);
+	void Swap_Vector(BoolVector& Other);
 	void Inverse_All();
 	void Inverse_Index(int index);
 	void Set_Index(int index, bool value);
-	void Set_Range(int start, int end, bool value);
-	void Set_All();
+	void Set_Range(int start, int quantity, bool value);
+	void Set_All(bool value);
 	int Weight() const;
 	void Print() const;
 

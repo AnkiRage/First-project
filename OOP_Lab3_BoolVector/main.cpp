@@ -19,7 +19,11 @@ using std::cin;
 
 int main()
 {
-	// UI* M;
+
+	char S[28];
+	gets_s(S, 28);
+	// cout << S;
+	// // UI* M;
 	// int m, n;
 	// puts("Quantity of strings = ");
 	// scanf_s("%d", &m);
