@@ -60,7 +60,7 @@ public:
 	BoolVector& operator<<=(const int shift);
 	BoolVector operator>>(const int shift) const; 
 	BoolVector& operator>>=(const int shift);
-	BoolVector& operator~();
+	BoolVector operator~();
 	BoolVector& operator=(const BoolVector& Other);
 
 	
