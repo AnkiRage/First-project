@@ -1,4 +1,4 @@
-#include "BoolVector.h"
+#include "BoolMatrix.h"
 
 #include <iostream>
 #include <cmath>
@@ -16,8 +16,21 @@ using Cell = unsigned char;
 using UI = unsigned int;
 
 
+int BoolMatrix::test(){
 
-BoolVector::BoolVector(int lenght){
+}
+
+
+
+
+
+
+
+
+
+
+//////////////////VECTOR/////////////////////
+BoolMatrix::BoolVector::BoolVector(int lenght){
 	m_lenght = lenght;
 	m_cellCount = m_lenght / cellSize;
 	if (lenght % cellSize != 0)
@@ -25,7 +38,7 @@ BoolVector::BoolVector(int lenght){
 	Vector = new Cell[m_cellCount];
 }
 
-BoolVector::BoolVector(const BoolVector& Other){
+BoolMatrix::BoolVector::BoolVector(const BoolVector& Other){
 	m_cellCount = Other.m_cellCount;
 	m_lenght = Other.m_lenght;
 	Vector = new Cell[m_cellCount];
@@ -34,7 +47,7 @@ BoolVector::BoolVector(const BoolVector& Other){
 	}
 }
 
-BoolVector::BoolVector(int lenght, bool value){
+BoolMatrix::BoolVector::BoolVector(int lenght, bool value){
 	m_lenght = lenght;
 	m_cellCount = m_lenght / cellSize;
 	if (lenght % cellSize != 0)
@@ -51,7 +64,7 @@ BoolVector::BoolVector(int lenght, bool value){
 	}
 }
 
-BoolVector::BoolVector(char CharVector[], int lenght){
+BoolMatrix::BoolVector::BoolVector(char CharVector[], int lenght){
 	Cell mask = 0;
 	int flag = 0;
 	m_lenght = lenght;
@@ -75,21 +88,21 @@ BoolVector::BoolVector(char CharVector[], int lenght){
 	}
 }
 
-BoolVector::~BoolVector(){
+BoolMatrix::BoolVector::~BoolVector(){
 	delete[] Vector;
 }
 
-int BoolVector::Get_Lenght() const{
+int BoolMatrix::BoolVector::Get_Lenght() const{
 	return m_lenght;
 }
 
-void BoolVector::Swap_Vector(BoolVector& Other){
+void BoolMatrix::BoolVector::Swap_Vector(BoolVector& Other){
 	Swap(m_lenght, Other.m_lenght);
 	Swap(m_cellCount, Other.m_cellCount);
 	Swap(Vector, Other.Vector);
 }
 
-void BoolVector::Inverse_All(){
+void BoolMatrix::BoolVector::Inverse_All(){
 	Cell mask = 1;
 	for(int i = 0; i < cellSize - 1; i++ ){
 			mask <<= 1;
@@ -100,7 +113,7 @@ void BoolVector::Inverse_All(){
 	}
 }
 
-void BoolVector::Inverse_Index(int index){
+void BoolMatrix::BoolVector::Inverse_Index(int index){
 	if (index >= m_lenght)
 	return;
 	Cell mask = 1;
@@ -112,7 +125,7 @@ void BoolVector::Inverse_Index(int index){
 	Vector[cellLocation] ^= mask;
 }
 
-void BoolVector::Set_Index(int index, bool value){
+void BoolMatrix::BoolVector::Set_Index(int index, bool value){
 	if (index >= m_lenght)
 		return;
 	Cell mask;
@@ -139,13 +152,13 @@ void BoolVector::Set_Index(int index, bool value){
 	}
 }
 
-void BoolVector::Set_Range(int start, int quantity, bool value){
+void BoolMatrix::BoolVector::Set_Range(int start, int quantity, bool value){
 	for(int  i = 0; i < quantity; i++){
 		Set_Index(start + i, value);
 	}
 }
 
-void BoolVector::Set_All(bool value){
+void BoolMatrix::BoolVector::Set_All(bool value){
 	Cell mask;
 	if (value){
 		mask = 1;
@@ -165,7 +178,7 @@ void BoolVector::Set_All(bool value){
 	}
 }
 
-int BoolVector::Weight() const{
+int BoolMatrix::BoolVector::Weight_Vector() const{
 	int weight = 0;
 	Cell mask = 0;
 	for (int g = 0; g < m_cellCount; g++){
@@ -178,7 +191,7 @@ int BoolVector::Weight() const{
 	return weight;
 }
 
-void BoolVector::Print() const{
+void BoolMatrix::BoolVector::Print() const{
 	int flag = 0;
 	Cell mask = 0;
 	if (m_lenght % cellSize != 0)
@@ -198,19 +211,19 @@ void BoolVector::Print() const{
 	}
 }
 
-bool BoolVector::operator[](int index) const{
+bool BoolMatrix::BoolVector::operator[](int index) const{
 	if (index >= m_lenght)
 		return;
 	Cell mask = 1;
 	mask <<= cellSize - (index % cellSize);
-	Cell Temp = Vector[index / cellSize];
+	Cell Temp = Vector[index  / cellSize];
 	if (Temp & mask)
 		return 1;
 	else 
 		return 0;
 }
 
-BoolVector BoolVector::operator&(const BoolVector& Other) const{
+BoolMatrix::BoolVector BoolMatrix::BoolVector::operator&(const BoolVector& Other) const{
 	if( m_lenght != Other.m_lenght) 
 		return ;
 	BoolVector Temp(*this);
@@ -220,7 +233,7 @@ BoolVector BoolVector::operator&(const BoolVector& Other) const{
 	return Temp;
 }
 
-BoolVector& BoolVector::operator&=(const BoolVector& Other){
+BoolMatrix::BoolVector& BoolMatrix::BoolVector::operator&=(const BoolVector& Other){
 	if( m_lenght != Other.m_lenght) 
 		return ;
 	for(int i = 0; i < m_cellCount; i++){
@@ -229,7 +242,7 @@ BoolVector& BoolVector::operator&=(const BoolVector& Other){
 	return *this;
 }
 
-BoolVector BoolVector::operator|(const BoolVector& Other) const{
+BoolMatrix::BoolVector BoolMatrix::BoolVector::operator|(const BoolVector& Other) const{
 	if( m_lenght != Other.m_lenght) 
 		return ;
 	BoolVector Temp(*this);
@@ -239,7 +252,7 @@ BoolVector BoolVector::operator|(const BoolVector& Other) const{
 	return Temp;
 }
 
-BoolVector& BoolVector::operator|=(const BoolVector& Other){
+BoolMatrix::BoolVector& BoolMatrix::BoolVector::operator|=(const BoolVector& Other){
 	if( m_lenght != Other.m_lenght) 
 		return ;
 	for(int i = 0; i < m_cellCount; i++){
@@ -248,7 +261,7 @@ BoolVector& BoolVector::operator|=(const BoolVector& Other){
 	return *this;
 }
 
-BoolVector BoolVector::operator^(const BoolVector& Other) const{
+BoolMatrix::BoolVector BoolMatrix::BoolVector::operator^(const BoolVector& Other) const{
 	if( m_lenght != Other.m_lenght) 
 		return ;
 	BoolVector Temp(*this);
@@ -258,7 +271,7 @@ BoolVector BoolVector::operator^(const BoolVector& Other) const{
 	return Temp;
 }
 
-BoolVector& BoolVector::operator^=(const BoolVector& Other){
+BoolMatrix::BoolVector& BoolMatrix::BoolVector::operator^=(const BoolVector& Other){
 	if( m_lenght != Other.m_lenght) 
 		return ;
 	for(int i = 0; i < m_cellCount; i++){
@@ -267,10 +280,10 @@ BoolVector& BoolVector::operator^=(const BoolVector& Other){
 	return *this;
 }
 
-BoolVector BoolVector::operator<<(const int shift) const{
+BoolMatrix::BoolVector BoolMatrix::BoolVector::operator<<(const int shift) const{
 	BoolVector Temp(*this);
 	int flag = 0;
-	if (Temp.m_lenght % Temp.cellSize != 0)
+	if (Temp.m_lenght % cellSize != 0)
 	flag = 1;
 	int shiftCell = shift / cellSize;
 	int shiftTail = shift % cellSize;
@@ -309,7 +322,7 @@ BoolVector BoolVector::operator<<(const int shift) const{
 	}
 }
 
-BoolVector& BoolVector::operator<<=(const int shift){
+BoolMatrix::BoolVector& BoolMatrix::BoolVector::operator<<=(const int shift){
 	int flag = 0;
 	if (m_lenght % cellSize != 0)
 	flag = 1;
@@ -351,10 +364,10 @@ BoolVector& BoolVector::operator<<=(const int shift){
 	}
 }
 
-BoolVector BoolVector::operator>>(const int shift) const{
+BoolMatrix::BoolVector BoolMatrix::BoolVector::operator>>(const int shift) const{
 	BoolVector Temp(*this);
 	int flag = 0;
-	if (Temp.m_lenght % Temp.cellSize != 0)
+	if (Temp.m_lenght % cellSize != 0)
 	flag = 1;
 	int shiftCell = shift / cellSize;
 	int shiftTail = shift % cellSize;
@@ -393,7 +406,7 @@ BoolVector BoolVector::operator>>(const int shift) const{
 	}
 } 
 
-BoolVector& BoolVector::operator>>=(const int shift){
+BoolMatrix::BoolVector& BoolMatrix::BoolVector::operator>>=(const int shift){
 	int flag = 0;
 	if (m_lenght % cellSize != 0)
 	flag = 1;
@@ -434,13 +447,13 @@ BoolVector& BoolVector::operator>>=(const int shift){
 	}
 }
 
-BoolVector BoolVector::operator~(){
+BoolMatrix::BoolVector BoolMatrix::BoolVector::operator~(){
 	BoolVector Temp(*this);
 	Temp.Inverse_All();
 	return Temp;
 }
 
-BoolVector& BoolVector::operator=(const BoolVector& Other){
+BoolMatrix::BoolVector& BoolMatrix::BoolVector::operator=(const BoolVector& Other){
 	delete[] Vector;
 	m_lenght = Other.m_lenght;
 	m_cellCount = Other.m_cellCount;
