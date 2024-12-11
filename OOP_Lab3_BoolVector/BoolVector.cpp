@@ -198,9 +198,18 @@ void BoolVector::Print() const{
 	}
 }
 
-BoolVector BoolVector::operator[](int index) const{
-
+bool BoolVector::operator[](int index) const{
+	if (index >= m_lenght)
+		return;
+	Cell mask = 1;
+	mask <<= cellSize - ((index + 1) % cellSize);
+	Cell Temp = Vector[(index + 1) / cellSize];
+	if (Temp & mask)
+		return 1;
+	else 
+		return 0;
 }
+
 BoolVector BoolVector::operator&(const BoolVector& Other) const{
 	if( m_lenght != Other.m_lenght) 
 		return ;
@@ -264,10 +273,13 @@ BoolVector BoolVector::operator<<(const int shift) const{
 	if (Temp.m_lenght % Temp.cellSize != 0)
 	flag = 1;
 	int shiftCell = shift / cellSize;
-	if (shiftCell >= Temp.m_cellCount){
+	int shiftTail = shift % cellSize;
+	Cell mask = 0;
+	if (shift >= Temp.m_lenght){
 		for( int i = 0; i < Temp.m_cellCount; i++){
 		Temp.Vector[i] = 0;
 		} 
+		return Temp;
 	}
 	else{
 		for( int i = 0; i < Temp.m_cellCount - shiftCell; i++){
@@ -276,23 +288,156 @@ BoolVector BoolVector::operator<<(const int shift) const{
 		for( int i = Temp.m_cellCount - shiftCell; i < Temp.m_cellCount; i++){
 			Temp.Vector[i] = 0;
 		}
-
+		if(flag){
+			Cell Buffer1 = 0, Buffer2 = 0;
+			for (int i = 0; i < Temp.m_lenght % Temp.m_cellCount; i++){
+			mask++;
+			mask <<= cellSize - 1 - i;
+			}
+			Temp.Vector[Temp.m_cellCount - 1] &= mask;
+			for(int i = Temp.m_cellCount - 1; i <= 0; i-- ){
+				Buffer1 = Temp.Vector[i];
+				Temp.Vector[i] <<= shiftTail;
+				Buffer1 >>= cellSize - shiftTail;
+				Temp.Vector[i] |= Buffer2;
+				Buffer2 = Buffer1;
+			}
+			return Temp;
+		}
+		else
+			return Temp;
 	}
 }
 
 BoolVector& BoolVector::operator<<=(const int shift){
-	
-}
-BoolVector BoolVector::operator>>(const int shift) const{
-	
-} 
-BoolVector& BoolVector::operator>>=(const int shift){
-	
+	int flag = 0;
+	if (m_lenght % cellSize != 0)
+	flag = 1;
+	int shiftCell = shift / cellSize;
+	int shiftTail = shift % cellSize;
+	Cell mask = 0;
+	if (shift >= m_lenght){
+		for( int i = 0; i < m_cellCount; i++){
+		Vector[i] = 0;
+		} 
+		return *this;
+	}
+	else{
+		for( int i = 0; i < m_cellCount - shiftCell; i++){
+			Vector[i] = Vector[i + shiftCell];
+		}
+		for( int i = m_cellCount - shiftCell; i < m_cellCount; i++){
+			Vector[i] = 0;
+		}
+		if(flag){
+			Cell Buffer1 = 0, Buffer2 = 0;
+			for (int i = 0; i < m_lenght % m_cellCount; i++){
+			mask++;
+			mask <<= cellSize - 1 - i;
+			}
+			Vector[m_cellCount - 1] &= mask;
+			for(int i = m_cellCount - 1; i <= 0; i-- ){
+				Buffer1 = Vector[i];
+				Vector[i] <<= shiftTail;
+				Buffer1 >>= cellSize - shiftTail;
+				Vector[i] |= Buffer2;
+				Buffer2 = Buffer1;
+			}
+			return *this;
+
+		}
+		else
+			return *this;
+	}
 }
 
-BoolVector& BoolVector::operator~(){
-	Inverse_All();
-	return *this;
+BoolVector BoolVector::operator>>(const int shift) const{
+	BoolVector Temp(*this);
+	int flag = 0;
+	if (Temp.m_lenght % Temp.cellSize != 0)
+	flag = 1;
+	int shiftCell = shift / cellSize;
+	int shiftTail = shift % cellSize;
+	Cell mask = 0;
+	if (shift >= Temp.m_lenght){
+		for( int i = 0; i < Temp.m_cellCount; i++){
+		Temp.Vector[i] = 0;
+		} 
+		return Temp;
+	}
+	else{
+		for( int i = 0; i < Temp.m_cellCount - shiftCell; i++){
+			Temp.Vector[i + shiftCell] = Temp.Vector[i];
+		}
+		for( int i = 0; i < shiftCell; i++){
+			Temp.Vector[i] = 0;
+		}
+		if(flag){
+			Cell Buffer1 = 0, Buffer2 = 0;
+			for (int i = 0; i < Temp.m_lenght % Temp.m_cellCount; i++){
+			mask++;
+			mask <<= cellSize - 1 - i;
+			}
+			Temp.Vector[Temp.m_cellCount - 1] &= mask;
+			for(int i = 0; i < Temp.m_cellCount - 1; i++){
+				Buffer1 = Temp.Vector[i];
+				Temp.Vector[i] >>= shiftTail;
+				Buffer1 <<= cellSize - shiftTail;
+				Temp.Vector[i] |= Buffer2;
+				Buffer2 = Buffer1;
+			}
+			return Temp;
+		}
+		else
+			return Temp;
+	}
+} 
+
+BoolVector& BoolVector::operator>>=(const int shift){
+	int flag = 0;
+	if (m_lenght % cellSize != 0)
+	flag = 1;
+	int shiftCell = shift / cellSize;
+	int shiftTail = shift % cellSize;
+	Cell mask = 0;
+	if (shift >= m_lenght){
+		for( int i = 0; i < m_cellCount; i++){
+		Vector[i] = 0;
+		} 
+		return *this;
+	}
+	else{
+		for( int i = 0; i < m_cellCount - shiftCell; i++){
+			Vector[i + shiftCell] = Vector[i];
+		}
+		for( int i = 0; i < shiftCell; i++){
+			Vector[i] = 0;
+		}
+		if(flag){
+			Cell Buffer1 = 0, Buffer2 = 0;
+			for (int i = 0; i < m_lenght % m_cellCount; i++){
+			mask++;
+			mask <<= cellSize - 1 - i;
+			}
+			Vector[m_cellCount - 1] &= mask;
+			for(int i = 0; i < m_cellCount - 1; i++){
+				Buffer1 = Vector[i];
+				Vector[i] >>= shiftTail;
+				Buffer1 <<= cellSize - shiftTail;
+				Vector[i] |= Buffer2;
+				Buffer2 = Buffer1;
+			}
+			return *this;
+		}
+		else
+			return *this;
+	}
+}
+
+BoolVector BoolVector::operator~(){
+	BoolVector Temp(*this);
+	Temp.Inverse_All();
+	return Temp;
 }
 
 BoolVector& BoolVector::operator=(const BoolVector& Other){
@@ -305,96 +450,3 @@ BoolVector& BoolVector::operator=(const BoolVector& Other){
 	}
 	return *this;
 }
-
-
-
-
-
-
-
-// UI Transent(char s[], int n)
-// {
-// 	UI x = 0; int i;
-// 	for (i = 0; i < n; i++)
-// 	{
-// 		x <<= 1;
-// 		if (s[i] == '1') {
-// 			x++;
-// 		}
-
-// 	}
-// 	return x;
-// }
-
-// void InputBM(UI* x, int m, int n)
-// {
-// 	char s[33];
-// 	for (int i = 0; i < m; i++)
-// 	{
-// 		gets_s(s, 33);
-// 		x[i] = Transent(s, n);
-// 	}
-// }
-
-// void OutputBV(UI x, int n) {
-// 	UI mask = 1 << (n - 1);
-// 	for (int i = 0; i < n; i++, mask >>= 1) {
-// 		if (x & mask) printf("1"); else printf("0");
-// 	}
-// }
-
-
-// void OutputBM(UI* x, int m, int n) {
-// 	for (int i = 0; i < m; i++) {
-// 		OutputBV(x[i], n);
-// 		printf("\n");
-// 	}
-// }
-
-
-// int Weight1 (UI* x, int m, int n, int q){
-// 	int w, i;
-// 	UI mask = 1 << (n - q - 1) ;
-// 	for (w = 0, i = 0; i < m; i++)
-// 		if (x[i] & mask) w++;
-// 	return w;
-// }
-
-// UI* Invert(UI* x, int m, int n, int q) {
-// 	UI mask1 = 1 << (n - q - 1), mask2 = 1 << (n - (q + 1) - 1);   //или n - q -2
-// 	//printf("\n");
-// 	//OutputBV(mask1, n);
-// 	//printf("\n");
-// 	//OutputBV(mask2, n);
-// 	//getchar();
-// 	for (int i = 0; i < m; i++) {
-// 		if (((mask1 & x[i]) >> (n - q - 1)) != ((mask2 & x[i]) >> (n - (q + 1) - 1))) {
-// 			x[i] = x[i] ^ mask1;
-// 			x[i] = x[i] ^ mask2;
-// 		}
-// 	}
-// 	return x;
-// }
-
-
-// void Mark2(UI* x, int m, int n) {
-// 	int count = n;
-// 	UI* A;
-// 	A = new UI[m];
-// 	for (int i = 0; i < m; i++) {
-// 		A[i] = x[i];
-// 	}
-
-// 	for (; count > 1; count --) {
-// 		//printf("\ncount  = %d", count);
-// 		for (int q = 0; (q + 1) < count ; q++) {
-// 			if (Weight1(A, m, n, q) > Weight1(A, m, n, q + 1)) {
-// 				//printf("\nq1 = %d", q);
-// 				//printf("\nq2 = %d", q+1);
-// 				A = Invert(A, m, n, q);
-// 			}
-// 		}
-// 	}
-// 	OutputBM(A, m, n);
-
-// }

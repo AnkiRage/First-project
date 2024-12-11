@@ -21,7 +21,6 @@ int main()
 {
 
 	char S[28];
-	gets_s(S, 28);
 	// cout << S;
 	// // UI* M;
 	// int m, n;

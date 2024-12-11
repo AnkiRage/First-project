@@ -49,7 +49,8 @@ public:
 	int Weight() const;
 	void Print() const;
 
-	BoolVector operator[](int index) const;
+	bool operator[](int index) const;
+	BoolVector& operator[](int index);
 	BoolVector operator&(const BoolVector& Other) const; ///// Bool AND
 	BoolVector& operator&=(const BoolVector& Other);
 	BoolVector operator|(const BoolVector& Other) const; ///// Bool OR
@@ -73,13 +74,12 @@ private:
 	int m_cellCount;
 };
 
-ostream& operator<<(ostream& os, const BoolVector& Arr);
-istream& operator>>(ostream& is, const BoolVector& Arr);
-
-void Mark2(UI* x, int m, int n);
-UI* Invert(UI* x, int m, int n, int q);
-int Weight1 (UI* x, int m, int n, int q);
-void OutputBM(UI* x, int m, int n);
-void OutputBV(UI x, int n);
-void InputBM(UI* x, int m, int n);
-UI Transent (char s[], int n);
+ostream& operator<<(ostream& os, const BoolVector& Arr){
+	os << '{';
+	Arr.Print();
+	os << '}';
+	return os;
+}
+istream& operator>>(ostream& is, const BoolVector& Arr){
+	
+}
