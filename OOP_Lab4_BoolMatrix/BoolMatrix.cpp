@@ -16,7 +16,26 @@ using Cell = unsigned char;
 using UI = unsigned int;
 
 
-int BoolMatrix::test(){
+BoolMatrix::BoolMatrix(int lenght, int rows){
+	m_MatcellCount = lenght / cellSize;
+	if (lenght /  cellSize != 0){
+		m_MatcellCount++;
+	}
+	Matrix = new BoolVector[rows];
+	for(int i = 0; i < m_MatcellCount; i++){
+		Matrix[i].Vector = new Cell[m_MatcellCount];
+	}
+}
+BoolMatrix::BoolMatrix(int lenght, int rows, bool value){
+
+}
+BoolMatrix::BoolMatrix(const BoolMatrix& Other){
+
+}
+BoolMatrix::BoolMatrix(char* CharVector[], int lenght, int rows){
+
+}
+BoolMatrix::~BoolMatrix(){
 
 }
 
