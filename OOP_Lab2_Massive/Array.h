@@ -52,8 +52,6 @@ public:
 	bool Del_All_Value(ItemType value);
 	ItemType Find_Max() const;
 	const ItemType& Find_Min() const;
-	void Resize();
-	void Resize(int factor);
 	void Set_BefIt(ItemType value, iterator index);
 	void Del_ItRange(iterator start, iterator finish);
 	void Del_Iterator(iterator index);
@@ -70,6 +68,9 @@ public:
 	
 
 private:
+	void Resize();
+	void Resize(int factor);
+
 	ItemType* Arr;
 	int Capacity, Size;  //Capacity - действительный размер массива ::::  Size - количество элементов в массиве
 };
@@ -151,17 +152,18 @@ int Array<ItemType>::Get_Size() const{
 template <typename ItemType>
 void Array<ItemType>::Resize(){
 	ItemType *Arr2;
-	Arr2 = new ItemType [Capacity + Capacity / 3];
+	Arr2 = new ItemType[Size + Size / 3];
+	Capacity = Size + Size / 3;
 	for (int i = 0 ; i < Size; i++){
 		Arr2[i] = Arr[i];
 	}
-	Capacity = Capacity + Capacity / 3 ;
+	
 	delete[] Arr;
 	Arr = Arr2;
 }
 
 template <typename ItemType>
-void Array<ItemType>::Resize(int factor){
+void Array<ItemType>::Resize( int factor){
 	ItemType *Arr2;
 	Arr2 = new ItemType [Capacity + factor + (factor + Capacity) / 3];
 	for (int i = 0 ; i < Size; i++){
@@ -202,7 +204,14 @@ bool Array<ItemType>::Set_Index(int index, ItemType value){
 	if (index >= Size){
 		return false;
 	}
-	*(begin() + index) = value;
+	if (Size == Capacity){
+		Resize();
+	}
+	Size++;
+	for (int i = index - 1; i < Size - 1; i++){
+		Array[i + 1] = Array[i];
+	}
+	Array[index - 1] = value;
 	return true;
 }
 
@@ -232,10 +241,15 @@ bool Array<ItemType>::Del_Index(int index){
 	if (index >= Size ){
 		return false;
 	}
+
 	for( int i = index; i < Size -1; i++){
 		Arr[i] = Arr[i + 1];
 	}
 	Size --;
+
+	if (Capacity > 2 * Size)
+		Resize();
+
 	return true;
 }
 
@@ -247,6 +261,8 @@ bool Array<ItemType>::Del_Value(ItemType value){
 				Arr[g] = Arr[g+1];
 			}
 			Size --;
+			if (Capacity > 2 * Size)
+				Resize();
 			return true;
 		}
     }
@@ -266,6 +282,8 @@ bool Array<ItemType>::Del_All_Value(ItemType value){
 			Size--;
 		}
     }
+	if (Capacity > 2 * Size)
+		Resize();
 	return found;
 }
 
@@ -369,7 +387,7 @@ bool Array<ItemType>::operator!=(const Array<ItemType>&B) const{
 
 template <typename ItemType>
 void Array<ItemType>::Set_BefIt(ItemType value, iterator index){
-	if (index <= begin() || index > end()) 
+	if (index < begin() || index => end()) 
 		return;
 	if (end() == &Arr[Capacity]) 
 		Resize();
@@ -383,6 +401,9 @@ void Array<ItemType>::Del_ItRange(iterator start, iterator finish){
 		*(i) = *(i + diff);
 	}
 	Size -= diff;
+	if (Capacity > 2 * Size){
+		Resize();
+	}
 }
 
 template <typename ItemType>
