@@ -51,12 +51,12 @@ public:
 	bool Del_Value(ItemType value);
 	bool Del_All_Value(ItemType value);
 	ItemType Find_Max() const;
-	ItemType Find_Min() const;
+	const ItemType& Find_Min() const;
 	void Resize();
 	void Resize(int factor);
-	void Set_BefIt(ItemType value, ItemType* index);
-	void Del_ItRange(ItemType* start, ItemType* finish);
-	void Del_Iterator(ItemType* index);
+	void Set_BefIt(ItemType value, iterator index);
+	void Del_ItRange(iterator start, iterator finish);
+	void Del_Iterator(iterator index);
 
 	ItemType& operator [](const int index); 
 	const ItemType& operator [](const int index) const; 
@@ -88,7 +88,7 @@ ostream& operator<<(ostream& os, const Array<ItemType>& Arr){ //////////////////
 
 template <typename ItemType>
 istream& operator>>(istream& is, Array<ItemType>& Arr){ //////////////////////
-	for (int  i = 0 ; i < Arr.Get_Size(); i++){
+	for (int i = 0 ; i < Arr.size(); i++){
 		is >> Arr[i];
 	}
 	return is;
@@ -202,7 +202,7 @@ bool Array<ItemType>::Set_Index(int index, ItemType value){
 	if (index >= Size){
 		return false;
 	}
-	*(begin() + index) == value;
+	*(begin() + index) = value;
 	return true;
 }
 
@@ -246,8 +246,8 @@ bool Array<ItemType>::Del_Value(ItemType value){
         	for(int g = i ; g < Size - 1; g++){
 				Arr[g] = Arr[g+1];
 			}
-		Size --;
-		return true;
+			Size --;
+			return true;
 		}
     }
     return false;
@@ -255,21 +255,18 @@ bool Array<ItemType>::Del_Value(ItemType value){
 
 template <typename ItemType>
 bool Array<ItemType>::Del_All_Value(ItemType value){
-	int flag = 0;
+	bool found = false;
 	for (int i = 0; i < Size; i++){
-        if ( Arr[i] == value) {
-			flag = 1;
+        if (Arr[i] == value) {
+			found = true;
         	for(int g = i ; g < Size - 1; g++){
 				Arr[g] = Arr[g+1];
 			}
-		i--;
-		Size --;
+			i--;
+			Size--;
 		}
-
     }
-	if (flag)
-    	return true;
-	else return false;
+	return found;
 }
 
 template <typename ItemType>
@@ -283,13 +280,19 @@ ItemType Array<ItemType>::Find_Max() const{
 }
 
 template <typename ItemType>
-ItemType Array<ItemType>::Find_Min() const{
-	int min = Arr[0];
-	for( iterator i = (begin() + 1) ; i != end(); i++){
-		if(min > *i)
-			min = *i;
+const ItemType& Array<ItemType>::Find_Min() const{
+	//TODO: empty check
+	iterator it = begin();
+	iterator min = it;
+	it++;
+	while (it != end()) {
+		if (*it < *min)
+		{
+			min = it;
+		}
+		it++;
 	}
-	return min;
+	return *min;
 }
 
 template <typename ItemType>
@@ -304,6 +307,7 @@ const ItemType& Array<ItemType>::operator [](const int index) const{
 
 template <typename ItemType>
 Array<ItemType>& Array<ItemType>::operator=(const Array<ItemType>& B){
+	// arr = arr ?
 	Capacity = B.Capacity;
 	Size = B.Size;
 	ItemType *Arr2 = new ItemType[Capacity];
@@ -327,7 +331,7 @@ Array<ItemType>& Array<ItemType>::operator+=(const Array<ItemType>& B){
 		Resize(B.Size);
 	}
 	for(int i = 0; i < B.Size; i++){
-		Arr[Size++] = Arr[i];
+		Arr[Size++] = B[i];
 	}
 	return *this;
 }
@@ -335,19 +339,14 @@ Array<ItemType>& Array<ItemType>::operator+=(const Array<ItemType>& B){
 template <typename ItemType>
 Array<ItemType> Array<ItemType>::operator+(ItemType value ) const{
 	Array<ItemType> Result(*this);
-	Result.Set_End(value);
+	Result += value;
 	return Result;
 }  
 
 template <typename ItemType>
 Array<ItemType> Array<ItemType>::operator+(const Array<ItemType>& B) const{
 	Array<ItemType> Result(*this);
-	if (Result.Capacity < Result.Size + B.Size){
-		Result.Resize(B.Size);
-	}
-	for(int i = 0; i < B.Size; i++){
-		Arr[Result.Size++] = Arr[i];
-	}
+	Result += B;
 	return Result;
 }
 
@@ -365,14 +364,7 @@ bool Array<ItemType>::operator==(const Array<ItemType>&B) const{
 
 template <typename ItemType>
 bool Array<ItemType>::operator!=(const Array<ItemType>&B) const{
-	if( Size != B.Size){
-		return true;
-	}
-	for(int i = 0; i < Size; i++){
-		if (Arr[i] == B.Arr[i])
-			return false;
-	}
-	return true;
+	return !operator==(B);
 }
 
 template <typename ItemType>
@@ -386,17 +378,14 @@ void Array<ItemType>::Set_BefIt(ItemType value, iterator index){
 
 template <typename ItemType>
 void Array<ItemType>::Del_ItRange(iterator start, iterator finish){
-	int dif = finish - start;
-	for(iterator i = start; i != end() - dif; i++){
-		*(i) = *(i + dif);
+	int diff = finish - start;
+	for(iterator i = start; i != end() - diff; i++){
+		*(i) = *(i + diff);
 	}
-	Size -= dif;
+	Size -= diff;
 }
 
 template <typename ItemType>
 void Array<ItemType>::Del_Iterator(iterator index){
-	for (iterator  i = index; i != end() - 1; i++){
-		*(index) = *(index + 1);
-	}
-	Size--;
+	Del_Index(index - begin());
 }

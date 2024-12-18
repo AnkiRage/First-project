@@ -8,6 +8,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <iomanip>
+#include <assert.h>
 
 using std::cout;
 using std::cin;
@@ -42,10 +43,7 @@ BoolVector::BoolVector(int lenght, bool value){
 	Vector = new Cell[m_cellCount];
 	Cell mask = 0;
 	if (value)
-		for(int i = 0, mask = 1; i < cellSize; i-- ){
-			mask <<= 1;
-			mask++;
-		}
+		mask = ~mask;
 	for (int i = 0; i < m_cellCount; i++){
 		Vector[i] = mask;
 	}
@@ -200,9 +198,9 @@ void BoolVector::Print() const{
 
 bool BoolVector::operator[](int index) const{
 	if (index >= m_lenght)
-		return;
+		return false;
 	Cell mask = 1;
-	mask <<= cellSize - (index % cellSize);
+	mask <<= cellSize - (index % cellSize) - 1;
 	Cell Temp = Vector[index / cellSize];
 	if (Temp & mask)
 		return 1;
@@ -210,9 +208,15 @@ bool BoolVector::operator[](int index) const{
 		return 0;
 }
 
+BoolVector::Rank BoolVector::operator[](int index)
+{
+	assert(index >= 0 && index < m_lenght);
+    return Rank(&Vector[index / cellSize], _mask(index));
+}
+
 BoolVector BoolVector::operator&(const BoolVector& Other) const{
 	if( m_lenght != Other.m_lenght) 
-		return ;
+		return *this;
 	BoolVector Temp(*this);
 	for(int i = 0; i < m_cellCount; i++){
 		Temp.Vector[i] &= Other.Vector[i];
@@ -222,7 +226,7 @@ BoolVector BoolVector::operator&(const BoolVector& Other) const{
 
 BoolVector& BoolVector::operator&=(const BoolVector& Other){
 	if( m_lenght != Other.m_lenght) 
-		return ;
+		return *this;
 	for(int i = 0; i < m_cellCount; i++){
 		Vector[i] &= Other.Vector[i];
 	}
@@ -231,7 +235,7 @@ BoolVector& BoolVector::operator&=(const BoolVector& Other){
 
 BoolVector BoolVector::operator|(const BoolVector& Other) const{
 	if( m_lenght != Other.m_lenght) 
-		return ;
+		return *this;
 	BoolVector Temp(*this);
 	for(int i = 0; i < m_cellCount; i++){
 		Temp.Vector[i] |= Other.Vector[i];
@@ -241,7 +245,7 @@ BoolVector BoolVector::operator|(const BoolVector& Other) const{
 
 BoolVector& BoolVector::operator|=(const BoolVector& Other){
 	if( m_lenght != Other.m_lenght) 
-		return ;
+		return *this;
 	for(int i = 0; i < m_cellCount; i++){
 		Vector[i] |= Other.Vector[i];
 	}
@@ -250,7 +254,7 @@ BoolVector& BoolVector::operator|=(const BoolVector& Other){
 
 BoolVector BoolVector::operator^(const BoolVector& Other) const{
 	if( m_lenght != Other.m_lenght) 
-		return ;
+		return *this;
 	BoolVector Temp(*this);
 	for(int i = 0; i < m_cellCount; i++){
 		Temp.Vector[i] ^= Other.Vector[i];
@@ -260,7 +264,7 @@ BoolVector BoolVector::operator^(const BoolVector& Other) const{
 
 BoolVector& BoolVector::operator^=(const BoolVector& Other){
 	if( m_lenght != Other.m_lenght) 
-		return ;
+		return *this;
 	for(int i = 0; i < m_cellCount; i++){
 		Vector[i] ^= Other.Vector[i];
 	}
@@ -269,169 +273,84 @@ BoolVector& BoolVector::operator^=(const BoolVector& Other){
 
 BoolVector BoolVector::operator<<(const int shift) const{
 	BoolVector Temp(*this);
-	int flag = 0;
-	if (Temp.m_lenght % Temp.cellSize != 0)
-	flag = 1;
-	int shiftCell = shift / cellSize;
-	int shiftTail = shift % cellSize;
-	Cell mask = 0;
-	if (shift >= Temp.m_lenght){
-		for( int i = 0; i < Temp.m_cellCount; i++){
-		Temp.Vector[i] = 0;
-		} 
-		return Temp;
-	}
-	else{
-		for( int i = 0; i < Temp.m_cellCount - shiftCell; i++){
-			Temp.Vector[i] = Temp.Vector[i + shiftCell];
-		}
-		for( int i = Temp.m_cellCount - shiftCell; i < Temp.m_cellCount; i++){
-			Temp.Vector[i] = 0;
-		}
-		if(flag){
-			Cell Buffer1 = 0, Buffer2 = 0;
-			for (int i = 0; i < Temp.m_lenght % Temp.m_cellCount; i++){
-			mask++;
-			mask <<= cellSize - 1 - i;
-			}
-			Temp.Vector[Temp.m_cellCount - 1] &= mask;
-			for(int i = Temp.m_cellCount - 1; i <= 0; i-- ){
-				Buffer1 = Temp.Vector[i];
-				Temp.Vector[i] <<= shiftTail;
-				Buffer1 >>= cellSize - shiftTail;
-				Temp.Vector[i] |= Buffer2;
-				Buffer2 = Buffer1;
-			}
-			return Temp;
-		}
-		else
-			return Temp;
-	}
+	Temp <<= shift;
+	return Temp;
 }
 
 BoolVector& BoolVector::operator<<=(const int shift){
-	int flag = 0;
-	if (m_lenght % cellSize != 0)
-	flag = 1;
-	int shiftCell = shift / cellSize;
-	int shiftTail = shift % cellSize;
-	Cell mask = 0;
 	if (shift >= m_lenght){
-		for( int i = 0; i < m_cellCount; i++){
-		Vector[i] = 0;
-		} 
+		Set_All(0);
 		return *this;
 	}
-	else{
+	int shiftTail = shift % cellSize;
+	int shiftCell = shift / cellSize;
+
+	if (shiftCell)
+	{
 		for( int i = 0; i < m_cellCount - shiftCell; i++){
 			Vector[i] = Vector[i + shiftCell];
 		}
 		for( int i = m_cellCount - shiftCell; i < m_cellCount; i++){
 			Vector[i] = 0;
 		}
-		if(flag){
-			Cell Buffer1 = 0, Buffer2 = 0;
-			for (int i = 0; i < m_lenght % m_cellCount; i++){
-			mask++;
-			mask <<= cellSize - 1 - i;
-			}
-			Vector[m_cellCount - 1] &= mask;
-			for(int i = m_cellCount - 1; i <= 0; i-- ){
-				Buffer1 = Vector[i];
-				Vector[i] <<= shiftTail;
-				Buffer1 >>= cellSize - shiftTail;
-				Vector[i] |= Buffer2;
-				Buffer2 = Buffer1;
-			}
-			return *this;
-
-		}
-		else
-			return *this;
 	}
+	
+	if(shiftTail){
+		Cell Buffer1 = 0, Buffer2 = 0;
+		for(int i = m_cellCount - 1; i >= 0; i--){
+			Buffer1 = Vector[i];
+			Vector[i] <<= shiftTail;
+			Buffer1 >>= cellSize - shiftTail;
+			Vector[i] |= Buffer2;
+			Buffer2 = Buffer1;
+		}
+	}
+
+	if (m_lenght % cellSize != 0) {
+        Vector[m_cellCount - 1] &= ~((1 << (cellSize - m_lenght % cellSize)) - 1);
+    }
+
+	return *this;
 }
 
 BoolVector BoolVector::operator>>(const int shift) const{
 	BoolVector Temp(*this);
-	int flag = 0;
-	if (Temp.m_lenght % Temp.cellSize != 0)
-	flag = 1;
-	int shiftCell = shift / cellSize;
-	int shiftTail = shift % cellSize;
-	Cell mask = 0;
-	if (shift >= Temp.m_lenght){
-		for( int i = 0; i < Temp.m_cellCount; i++){
-		Temp.Vector[i] = 0;
-		} 
-		return Temp;
-	}
-	else{
-		for( int i = 0; i < Temp.m_cellCount - shiftCell; i++){
-			Temp.Vector[i + shiftCell] = Temp.Vector[i];
-		}
-		for( int i = 0; i < shiftCell; i++){
-			Temp.Vector[i] = 0;
-		}
-		if(flag){
-			Cell Buffer1 = 0, Buffer2 = 0;
-			for (int i = 0; i < Temp.m_lenght % Temp.m_cellCount; i++){
-			mask++;
-			mask <<= cellSize - 1 - i;
-			}
-			Temp.Vector[Temp.m_cellCount - 1] &= mask;
-			for(int i = 0; i < Temp.m_cellCount - 1; i++){
-				Buffer1 = Temp.Vector[i];
-				Temp.Vector[i] >>= shiftTail;
-				Buffer1 <<= cellSize - shiftTail;
-				Temp.Vector[i] |= Buffer2;
-				Buffer2 = Buffer1;
-			}
-			return Temp;
-		}
-		else
-			return Temp;
-	}
+	Temp >>= shift;
+	return Temp;
 } 
 
 BoolVector& BoolVector::operator>>=(const int shift){
-	int flag = 0;
-	if (m_lenght % cellSize != 0)
-	flag = 1;
-	int shiftCell = shift / cellSize;
-	int shiftTail = shift % cellSize;
-	Cell mask = 0;
 	if (shift >= m_lenght){
-		for( int i = 0; i < m_cellCount; i++){
-		Vector[i] = 0;
-		} 
+		Set_All(0);
 		return *this;
 	}
-	else{
-		for( int i = 0; i < m_cellCount - shiftCell; i++){
-			Vector[i + shiftCell] = Vector[i];
+
+	int shiftTail = shift % cellSize;
+	int shiftCell = shift / cellSize;
+	if (shiftCell){
+		for (int i = m_cellCount - 1; i >= shiftCell; --i) {
+            Vector[i] = Vector[i - shiftCell];
+        }
+        for (int i = 0; i < shiftCell; ++i) {
+            Vector[i] = 0;
 		}
-		for( int i = 0; i < shiftCell; i++){
-			Vector[i] = 0;
-		}
-		if(flag){
-			Cell Buffer1 = 0, Buffer2 = 0;
-			for (int i = 0; i < m_lenght % m_cellCount; i++){
-			mask++;
-			mask <<= cellSize - 1 - i;
-			}
-			Vector[m_cellCount - 1] &= mask;
-			for(int i = 0; i < m_cellCount - 1; i++){
-				Buffer1 = Vector[i];
-				Vector[i] >>= shiftTail;
-				Buffer1 <<= cellSize - shiftTail;
-				Vector[i] |= Buffer2;
-				Buffer2 = Buffer1;
-			}
-			return *this;
-		}
-		else
-			return *this;
 	}
+	if(shiftTail){
+		Cell Buffer1 = 0, Buffer2 = 0;
+		for(int i = 0; i < m_cellCount ; i++){
+			Buffer1 = Vector[i];
+			Vector[i] >>= shiftTail;
+			Buffer1 <<= cellSize - shiftTail;
+			Vector[i] |= Buffer2;
+			Buffer2 = Buffer1;
+		}
+	}
+
+	if (m_lenght % cellSize != 0) {
+        Vector[m_cellCount - 1] &= ~((1 << (cellSize - m_lenght % cellSize)) - 1);
+    }
+
+	return *this;
 }
 
 BoolVector BoolVector::operator~(){
@@ -449,4 +368,64 @@ BoolVector& BoolVector::operator=(const BoolVector& Other){
 		Vector[i] = Other.Vector[i];
 	}
 	return *this;
+}
+ostream& operator<<(ostream& os, const BoolVector& Vector){
+	os << '{';
+	for (int i = 0; i < Vector.Get_Lenght(); ++i)
+	{
+		os << Vector[i];
+	}
+	os << '}';
+	return os;
+}
+istream& operator>>(istream& is, BoolVector& Vector){
+	char bit;
+	for (int i = 0; i < Vector.Get_Lenght(); ++i)
+	{
+		is >> bit;
+		Vector.Set_Index(i, bit == '1');
+	}
+	return is;
+	
+}
+
+int BoolVector::_excessRankCount() const
+{
+	return (m_cellCount * cellSize - m_lenght);
+}
+
+BoolVector::Cell BoolVector::_mask(int index)
+{
+    Cell mask = 1;
+	mask <<= cellSize - 1 - (index % cellSize);
+	return mask;
+}
+
+BoolVector::Rank::Rank(Cell* cell, Cell mask)
+    : m_cell(cell)
+    , m_mask(mask)
+{
+    assert(m_cell != nullptr);
+    assert(m_mask > 0);
+}
+
+BoolVector::Rank& BoolVector::Rank::operator=(const Rank& other)
+{
+    return operator=(static_cast<bool>(other));
+}
+
+BoolVector::Rank& BoolVector::Rank::operator=(bool value)
+{
+    if (value){
+        *m_cell |= m_mask;
+    }
+    else{
+        *m_cell &= ~m_mask;
+    }
+    return *this;
+}
+
+BoolVector::Rank::operator bool() const
+{
+	return (*m_cell & m_mask) != 0;
 }

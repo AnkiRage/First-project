@@ -16,8 +16,6 @@ using std::istream;
 
 using UI = unsigned int;
 
-
-
 class BoolVector
 {
 using Cell = unsigned char;
@@ -31,6 +29,8 @@ void Swap(Type& A, Type& B)
 }
 
 public:
+	class Rank;
+
 	static const int cellSize = 8;
 
 	BoolVector(int lenght = cellSize);
@@ -50,7 +50,7 @@ public:
 	void Print() const;
 
 	bool operator[](int index) const;
-	BoolVector& operator[](int index);
+	Rank operator[](int index);
 	BoolVector operator&(const BoolVector& Other) const; ///// Bool AND
 	BoolVector& operator&=(const BoolVector& Other);
 	BoolVector operator|(const BoolVector& Other) const; ///// Bool OR
@@ -64,22 +64,28 @@ public:
 	BoolVector operator~();
 	BoolVector& operator=(const BoolVector& Other);
 
-	
-
-
-
 private:
+	int _excessRankCount() const;
+	static Cell _mask(int index);
+
 	Cell* Vector;
 	int m_lenght;
 	int m_cellCount;
 };
 
-ostream& operator<<(ostream& os, const BoolVector& Arr){
-	os << '{';
-	Arr.Print();
-	os << '}';
-	return os;
-}
-istream& operator>>(ostream& is, const BoolVector& Arr){
-	
-}
+ostream& operator<<(ostream& os, const BoolVector& Vector);
+istream& operator>>(istream& is, BoolVector& Vector);
+
+class BoolVector::Rank
+{
+public:
+    Rank() = default;
+    Rank(Cell* cell, Cell mask);
+    Rank& operator=(const Rank& other);
+    Rank& operator=(bool value);
+    operator bool() const;
+    
+private:
+    Cell* m_cell = nullptr;
+    Cell m_mask = 0;
+};

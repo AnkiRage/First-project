@@ -19,8 +19,14 @@ using std::cin;
 
 int main()
 {
-
-	char S[28];
+	BoolVector bv(40, 1);
+	for (int i = 0; i <= bv.Get_Lenght(); ++i){
+		std::cout << (bv << i) << '\n';
+	}
+	BoolVector BV(15, 1);
+	cout << BV << '\n';
+	BV[10] = 0;
+	cout << BV << '\n';
 	// cout << S;
 	// // UI* M;
 	// int m, n;
@@ -37,5 +43,5 @@ int main()
 	// puts("Marked Matrix:");
 	// Mark2(M, m, n);
 	// delete[]M;
-	// return 0;
+	return 0;
 }
