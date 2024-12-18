@@ -36,7 +36,7 @@ public:
 	BoolVector(int lenght = cellSize);
 	BoolVector(const BoolVector& Other);
 	BoolVector(int lenght, bool value);
-	BoolVector(char CharVector[], int leght);
+	BoolVector(char* CharVector, int leght);
 	~BoolVector();
 
 	int Get_Lenght() const;

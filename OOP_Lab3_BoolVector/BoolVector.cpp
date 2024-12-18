@@ -49,7 +49,7 @@ BoolVector::BoolVector(int lenght, bool value){
 	}
 }
 
-BoolVector::BoolVector(char CharVector[], int lenght){
+BoolVector::BoolVector(char* CharVector, int lenght){
 	Cell mask = 0;
 	int flag = 0;
 	m_lenght = lenght;

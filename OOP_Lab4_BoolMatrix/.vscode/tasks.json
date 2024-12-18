@@ -21,6 +21,7 @@
                 "-g",
                 "${workspaceFolder}\\*.h",
                 "${workspaceFolder}\\*.cpp",
+                "${workspaceFolder}\\..\\OOP_Lab3_BoolVector\\BoolVector.cpp",
                 "-o",
                 "${workspaceFolder}\\build\\${workspaceFolderBasename}.exe"
             ],

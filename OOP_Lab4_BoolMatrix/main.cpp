@@ -19,7 +19,7 @@ using std::cin;
 
 int main()
 {
-
+	BoolMatrix bm;
 	char S[28];
 	// cout << S;
 	// // UI* M;
