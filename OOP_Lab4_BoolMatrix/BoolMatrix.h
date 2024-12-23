@@ -48,7 +48,8 @@ public:
 	void Set_BoolRange(int start, int quantity, int row, bool value);
 
 	BoolMatrix& operator=(const BoolMatrix& Other);
-	BoolVector operator[](int index) const;
+	BoolVector& operator[](int index) const;
+	BoolVector& operator[](int index);
 	BoolMatrix operator&(const BoolMatrix& Other) const;
 	BoolMatrix& operator&=(const BoolMatrix& Other);
 	BoolMatrix operator|(const BoolMatrix& Other) const;
@@ -56,9 +57,14 @@ public:
 	BoolMatrix operator^(const BoolMatrix& Other) const;
 	BoolMatrix& operator^=(const BoolMatrix& Other);
 	BoolMatrix operator~()const;
+
+
 	
 private:
 	BoolVector* Matrix;
 	int m_rows;
 	int m_cols;
 };
+
+ostream& operator<<(ostream& os, const BoolMatrix& Matrix);
+istream& operator>>(istream& is, BoolMatrix& Matrix);

@@ -13,6 +13,10 @@ using std::cout;
 using std::cin;
 
 BoolMatrix::BoolMatrix(int cols, int rows){
+	if( cols == 0 || rows == 0){
+		cout << "Matrix can't be 0";
+		return;
+	}
 	Matrix = new BoolVector[rows];
 	for (int i = 0; i < rows; ++i)
 	{
@@ -20,6 +24,10 @@ BoolMatrix::BoolMatrix(int cols, int rows){
 	}
 }
 BoolMatrix::BoolMatrix(int cols, int rows, bool value){
+	if( cols == 0 || rows == 0){
+		cout << "Matrix can't be 0";
+		return;
+	}
 	Matrix = new BoolVector[rows];
 	for (int i = 0; i < rows; ++i)
 	{
@@ -35,6 +43,10 @@ BoolMatrix::BoolMatrix(const BoolMatrix& Other){
 	}
 }
 BoolMatrix::BoolMatrix(char** CharVector, int cols, int rows){
+	if( cols == 0 || rows == 0){
+		cout << "Matrix can't be 0";
+		return;
+	}
 	Matrix = new BoolVector[rows];
 	m_cols = cols;
 	m_rows = rows;
@@ -85,25 +97,35 @@ BoolVector BoolMatrix::Mat_Disjunction() const{
 }
 
 int BoolMatrix::Weight_DefVector(int index) const{
-	return Matrix[index - 1].Weight();
+	if(index < 0 || index >= m_rows)
+		return 0;
+	return Matrix[index].Weight();
 }
 
 void BoolMatrix::Inverse_BoolIndex(int index, int row){
-	Matrix[row - 1].Inverse_Index(index);
+	if(row < 0 || row >= m_rows || index < 0 || index >= m_cols)
+		return;
+	Matrix[row].Inverse_Index(index);
 }
 
 void BoolMatrix::Inverse_BoolRange(int start, int quantity, int row){
-	for (int i = 0; i < quantity; i++){
-	Matrix[row - 1].Inverse_Index(start + i);
+	if (row < 0 || row >= m_rows || start < 0 || start >= m_cols)
+		return;
+	for (int i = 0; i < quantity && i < m_cols; i++){
+	Matrix[row].Inverse_Index(start + i);
 	}
 }
 
 void BoolMatrix::Set_BoolIndex(int index, int row, bool value){
-	Matrix[row - 1].Set_Index(index, value);
+	if (row < 0 || row >= m_rows || index < 0 || index > m_cols)
+		return;
+	Matrix[row].Set_Index(index, value);
 }
 
 void BoolMatrix::Set_BoolRange(int start, int quantity, int row, bool value){
-	for( int i = 0; i < quantity; i++){
+	if (row < 0 || row >= m_rows || start < 0 || start >= m_cols)
+		return;
+	for( int i = 0; i < quantity && i < m_cols; i++){
 		Matrix[row - 1].Set_Index(start + quantity, value);
 	}
 }
@@ -119,9 +141,12 @@ BoolMatrix& BoolMatrix::operator=(const BoolMatrix& Other){
 	return *this;
 }
 
-BoolVector BoolMatrix::operator[](int index) const{
-	BoolVector Temp(Matrix[index - 1]);
-	return Temp;
+BoolVector& BoolMatrix::operator[](int index) const{
+	return Matrix[index];
+}
+
+BoolVector& BoolMatrix::operator[](int index){
+	return Matrix[index];
 }
 
 BoolMatrix BoolMatrix::operator&(const BoolMatrix& Other) const{
@@ -171,3 +196,23 @@ BoolMatrix BoolMatrix::operator~()const{
 	return Temp;
 }
 
+ostream& operator<<(ostream& os, const BoolMatrix& Matrix){
+	for (int i = 0 ; i < Matrix.Get_Rows(); i++){
+		os << "| " << Matrix[i] << " |";
+	}
+	return os;
+}
+
+istream& operator>>(istream& is, BoolMatrix& Matrix){
+	char bit;
+	for (int i = 0 ; i < Matrix.Get_Rows(); i++){
+		for( int g = 0; g < Matrix.Get_Cols(); g++){
+			is >> bit;
+			if (bit == '1')
+				Matrix[i].Set_Index(g, 1);
+			else
+				Matrix[i].Set_Index(g, 0);
+		}
+	}
+	return is;
+}

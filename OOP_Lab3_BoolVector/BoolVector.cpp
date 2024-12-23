@@ -383,10 +383,12 @@ istream& operator>>(istream& is, BoolVector& Vector){
 	for (int i = 0; i < Vector.Get_Lenght(); ++i)
 	{
 		is >> bit;
-		Vector.Set_Index(i, bit == '1');
+		if (bit == '1')
+			Vector.Set_Index(i, 1);
+		else
+			Vector.Set_Index(i, 0);
 	}
 	return is;
-	
 }
 
 int BoolVector::_excessRankCount() const

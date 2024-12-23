@@ -289,17 +289,22 @@ bool Array<ItemType>::Del_All_Value(ItemType value){
 
 template <typename ItemType>
 ItemType Array<ItemType>::Find_Max() const{
-	int max = Arr[0];
-	for( iterator i = (begin() + 1) ; i != end(); i++){
-		if(max < *i)
-			max = *i;
+	if (Size == 0) return;
+	iterator it = begin();
+	iterator max = it;
+	it++;
+	while (it != end()) {
+		if (*it > *max)
+		{
+			max = it;
+		}
+		it++;
 	}
-	return max;
+	return *max;
 }
-
 template <typename ItemType>
 const ItemType& Array<ItemType>::Find_Min() const{
-	//TODO: empty check
+	if (Size == 0) return;
 	iterator it = begin();
 	iterator min = it;
 	it++;

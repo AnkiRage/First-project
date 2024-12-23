@@ -21,7 +21,7 @@ int main()
 {
 	BoolMatrix bm;
 	char S[28];
-	// cout << S;
+	 cout << S;
 	// // UI* M;
 	// int m, n;
 	// puts("Quantity of strings = ");
