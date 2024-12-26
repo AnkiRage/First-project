@@ -426,7 +426,35 @@ void List<ItemType>::Clear(){
 
 template <typename ItemType>
 void List<ItemType>::Sort(){
+    if (isEmpty() || head->next == nullptr) {
+        return;
+    }
+    int n = m_Size;
+    int gap = n / 2;  
+    for(int gap = n / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < n; ++i) {
+            Node<ItemType>* current = head->next;
+            for (int j = 0; j < i; ++j) {
+                current = current->next;
+            }
 
+            ItemType value = current->key;
+            int j = i;
+            Node<ItemType>* prev = head;
+            Node<ItemType>* temp = head->next;
+
+            while (j >= gap && temp != nullptr) {
+                prev = temp;
+                temp = temp->next;
+                --j;
+            }
+            Node<ItemType>* newNode = new Node<ItemType>;
+            newNode->key = value;
+            prev->next = newNode;
+            newNode->next = temp;
+
+        }
+    }
 }
 
 template <typename ItemType>

@@ -23,7 +23,6 @@ void Swap(Type& A, Type& B)
     B = Buff;
 }
 
-
 template <typename ItemType>
 class Array
 {
