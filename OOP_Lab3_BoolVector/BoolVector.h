@@ -48,6 +48,7 @@ public:
 	void Set_All(bool value);
 	int Weight() const;
 	void Print() const;
+	bool Get_Index(int index) const;
 
 	bool operator[](int index) const;
 	Rank operator[](int index);

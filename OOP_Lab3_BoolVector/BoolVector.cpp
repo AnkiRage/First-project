@@ -196,6 +196,18 @@ void BoolVector::Print() const{
 	}
 }
 
+bool BoolVector::Get_Index(int index) const{
+	if (index >= m_lenght)
+		return false;
+	Cell mask = 1;
+	mask <<= cellSize - (index % cellSize) - 1;
+	Cell Temp = Vector[index / cellSize];
+	if (Temp & mask)
+		return 1;
+	else 
+		return 0;
+}
+
 bool BoolVector::operator[](int index) const{
 	if (index >= m_lenght)
 		return false;

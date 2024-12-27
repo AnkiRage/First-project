@@ -1,0 +1,41 @@
+{
+    "version": "2.0.0",
+    "windows": {
+        "options": {
+        "shell": {
+            "executable": "cmd.exe",
+            "args": [
+                "/C",
+                "mkdir \"${workspaceFolder}\\build\" &"
+            ]
+        }
+        }
+    },
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "g++.exe build and debug project",
+            "command": "C:/msys64/mingw64/bin/g++.exe",
+            "args": [
+                "-std=c++17",
+                "-g",
+                "${workspaceFolder}\\*.h",
+                "${workspaceFolder}\\*.cpp",
+                "${workspaceFolder}\\..\\OOP_Lab3_BoolVector\\BoolVector.cpp",
+                "-o",
+                "${workspaceFolder}\\build\\${workspaceFolderBasename}.exe"
+            ],
+            "options": {
+                "cwd": "C:\\msys64\\mingw64\\bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+
+        }
+    ]
+}
