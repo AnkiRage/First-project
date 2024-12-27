@@ -120,7 +120,7 @@ void BoolVector::Set_Index(int index, bool value){
 	}
 	if (value){
 		mask = 1;
-		mask <<= cellSize - (index % cellSize);
+		mask <<= cellSize - (index % cellSize) - 1;
 		Vector[cellLocation] |= mask;
 	}
 	else{

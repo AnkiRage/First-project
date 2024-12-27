@@ -22,6 +22,8 @@ BoolMatrix::BoolMatrix(int cols, int rows){
 	{
 		Matrix[i] = BoolVector(cols, false);
 	}
+	m_cols = cols;
+	m_rows = rows;
 }
 BoolMatrix::BoolMatrix(int cols, int rows, bool value){
 	if( cols == 0 || rows == 0){
@@ -33,6 +35,8 @@ BoolMatrix::BoolMatrix(int cols, int rows, bool value){
 	{
 		Matrix[i] = BoolVector(cols, value);
 	}
+	m_cols = cols;
+	m_rows = rows;
 }
 BoolMatrix::BoolMatrix(const BoolMatrix& Other){
 	m_cols = Other.m_cols;
@@ -198,7 +202,7 @@ BoolMatrix BoolMatrix::operator~()const{
 
 ostream& operator<<(ostream& os, const BoolMatrix& Matrix){
 	for (int i = 0 ; i < Matrix.Get_Rows(); i++){
-		os << "| " << Matrix[i] << " |";
+		os << "| " << Matrix[i] << " |\n";
 	}
 	return os;
 }
