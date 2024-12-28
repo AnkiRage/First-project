@@ -83,7 +83,7 @@ for(int f = 0; f < 4; f++){
         cout << "\nTime: " << GreedyDuration.count() << " seconds\n";
 
         double quality = 100.0 * (1 - (double)(MaxExactCost - GreedyCost) / (double)(MaxExactCost - MinExactCost));
-        cout << "\nGreedy solution quality: " << 100.0 - quality << "%\n";
+        cout << "\nGreedy solution quality: " << quality << "%\n";
     }
 }
 

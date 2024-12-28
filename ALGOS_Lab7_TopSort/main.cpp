@@ -7,23 +7,30 @@
 #include <windows.h>
 #include <stdio.h>
 #include <iomanip>
+#include <vector>
 
 using UI = unsigned int;
 #define UC unsigned char
 
-
+using std::vector;
 using std::cout;
 using std::cin;
 
 int main()
 {
+	vector<int> Sorted;
 	BoolMatrix Matrix(4, 4, false);
-	cout << "cols and rows = " << Matrix.Get_Cols() << " " << Matrix.Get_Rows();
+	cout << "cols and rows = " << Matrix.Get_Cols() << " " << Matrix.Get_Rows() << "\n";
 	Matrix.Set_BoolIndex(1, 0, true);
 	Matrix.Set_BoolIndex(2, 0, true);
 	Matrix.Set_BoolIndex(3, 1, true);
 	Matrix.Set_BoolIndex(3, 2, true);
 	cout << Matrix;
 
-	TopologicalSort(Matrix);
+	TopologicalSort(Matrix, Sorted);
+
+	cout << "Sorted = "; 
+	for(int num : Sorted){
+		cout << num;
+	}
 }
