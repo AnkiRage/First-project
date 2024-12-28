@@ -42,7 +42,7 @@ bool TopologicalSort(const BoolMatrix& Matrix, vector<int>& SortedOrder ) {
                 Matrix[current][j] = false; 
                 bool NextIter = false;
                 for (int i = 0; i < rows; i++) {
-                    NextIter = NextIter | Matrix[i][j];
+                    NextIter |= Matrix[i][j];
                 }
                 if (!NextIter) {
                     ZeroInDegree.push_back(j);
