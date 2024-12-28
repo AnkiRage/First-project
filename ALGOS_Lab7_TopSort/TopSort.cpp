@@ -36,16 +36,12 @@ bool TopologicalSort(const BoolMatrix& Matrix, vector<int>& SortedOrder ) {
         int current = ZeroInDegree.back(); 
         ZeroInDegree.pop_back(); 
         SortedOrder.push_back(current);
-
-        for (int j = 0; j < cols; j++) {
+        for (int j = 0; j < cols; j++) { 
             if (Matrix[current][j]) {
-                Matrix[current][j] = false; 
-                bool NextIter = false;
-                for (int i = 0; i < rows; i++) {
-                    NextIter |= Matrix[i][j];
-                }
-                if (!NextIter) {
-                    ZeroInDegree.push_back(j);
+                Matrix.Set_BoolIndex(j, current, false); 
+                BoolVector columnDisjunction = Matrix.Mat_Disjunction();
+            if (!columnDisjunction[j]) {
+                ZeroInDegree.push_back(j);
                 }
             }
         }
