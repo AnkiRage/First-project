@@ -11,7 +11,7 @@
 using std::vector;
 using std::string;
 
-int Find_First(string Text, string Substring);
-vector<int> Find_All(string Text, string Substring, int start, int end, vector<int>& Found);
+int Find_First(const string& Text,const string& Substring , int start, int end);
+void Find_All(const string& Text,const string& Substring, int start, int end, vector<int>& Found);
 
 
