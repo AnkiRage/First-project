@@ -27,6 +27,44 @@ void Gen_Matrix(vector<vector<int>>& matrix, int n, int minCost, int maxCost) {
     }
 }
 
+void Exact_TSP(const vector<vector<int>>& matrix, int startCity, int& minCost, vector<int>& bestPath, int& maxCost, vector<int>& worstPath) {
+    int n = matrix.size();
+    vector<int> cities;
+    for (int i = 0; i < n; ++i) {
+        if (i != startCity) {
+            cities.push_back(i);
+        }
+    }
+
+    minCost = numeric_limits<int>::max();
+    maxCost = numeric_limits<int>::min();
+    bestPath.clear();
+    worstPath.clear();
+
+    while (next_permutation(cities.begin(), cities.end())){
+        int currentCost = 0;
+        int currentCity = startCity;
+        for (int city : cities) {
+            currentCost += matrix[currentCity][city];
+            currentCity = city;
+        }
+        currentCost += matrix[currentCity][startCity];
+        if (currentCost < minCost) {
+            minCost = currentCost;
+            bestPath = cities;
+        }
+        if (currentCost > maxCost) {
+            maxCost = currentCost;
+            worstPath = cities;
+        }
+    } 
+
+    bestPath.insert(bestPath.begin(), startCity);
+    bestPath.push_back(startCity);
+
+    worstPath.insert(worstPath.begin(), startCity);
+    worstPath.push_back(startCity);
+}
 
 void Exact_TSP(const vector<vector<int>>& matrix, int startCity, int& minCost, vector<int>& bestPath) {
     int n = matrix.size();

@@ -11,5 +11,5 @@
 using std::vector;
 
 void Gen_Matrix(vector<vector<int>>& matrix, int n, int minCost, int maxCost);
-void Exact_TSP(const vector<vector<int>>& matrix, int startCity, int& minCost, vector<int>& bestPath);
+void Exact_TSP(const vector<vector<int>>& matrix, int startCity, int& minCost, vector<int>& bestPath, int& maxCost, vector<int>& worstPath);
 void Greedy_TSP(const vector<vector<int>>& matrix, int startCity, int& cost, vector<int>& path);

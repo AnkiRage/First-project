@@ -20,9 +20,11 @@ int main()
 {   
     int minCost = 1;
     int maxCost = 10;
-    vector<int> ExactPath;
+    vector<int> BestExactPath;
+    vector<int> WorstExactPath;
     vector<int> GreedyPath;
-    int ExactCost;
+    int MinExactCost;
+    int MaxExactCost;
     int GreedyCost;
 
 for(int f = 0; f < 4; f++){
@@ -51,7 +53,7 @@ for(int f = 0; f < 4; f++){
         int startCity = 0;
 
         auto Start = high_resolution_clock::now();
-        Exact_TSP(matrix, startCity, ExactCost, ExactPath);
+        Exact_TSP(matrix, startCity, MinExactCost, BestExactPath, MaxExactCost, WorstExactPath );
         auto End = high_resolution_clock::now();
         duration<double> ExactDuration = End - Start;
         Start = high_resolution_clock::now();
@@ -60,9 +62,14 @@ for(int f = 0; f < 4; f++){
         duration<double> GreedyDuration = End - Start;
 
         cout << "\nExact solution:\n";
-        cout << "Cost: " << ExactCost << "\n";
-        cout << "Path: ";
-        for (int city : ExactPath) {
+        cout << "Min Cost: " << MinExactCost << "\n";
+        cout << "Best Path: ";
+        for (int city : BestExactPath) {
+            cout << city << " ";
+        }
+        cout << "\nMax Cost: " << MaxExactCost << "\n";
+        cout << "Worst Path: ";
+        for (int city : WorstExactPath) {
             cout << city << " ";
         }
         cout << "\nTime: " << ExactDuration.count() << " seconds\n";
@@ -75,7 +82,7 @@ for(int f = 0; f < 4; f++){
         }
         cout << "\nTime: " << GreedyDuration.count() << " seconds\n";
 
-        double quality = 100.0 * (double)(GreedyCost - ExactCost) / (double)ExactCost;
+        double quality = 100.0 * (1 - (double)(MaxExactCost - GreedyCost) / (double)(MaxExactCost - MinExactCost));
         cout << "\nGreedy solution quality: " << 100.0 - quality << "%\n";
     }
 }
