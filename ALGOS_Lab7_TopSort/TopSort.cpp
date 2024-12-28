@@ -22,12 +22,8 @@ bool TopologicalSort(const BoolMatrix& Matrix, vector<int>& SortedOrder ) {
         return false;
     }
 
-    vector<bool> InDegree(rows, false); 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            InDegree[j] = (InDegree[j] | Matrix[i][j]);
-        }
-    }
+    BoolVector InDegree(rows, false);
+    InDegree = Matrix.Mat_Disjunction();
 
     vector<int> ZeroInDegree;
     for (int i = 0; i < rows; i++) {
